@@ -1,15 +1,29 @@
 <script lang="ts" setup>
 
 import type { ITeacher } from '~/types';
+import { useModal } from '~/composables/useModal';
+
+import TeacherAddModal from './TeacherAddModal.vue';
+
+const modal = useModal();
+
+const openConfirm = () => {
+  modal.component.value = markRaw(TeacherAddModal);
+  modal.showModal();
+  console.log(modal.show.value);
+}
 
 const teachers = ref<ITeacher[]>([])
-const showForm = ref(false)
 
-onMounted(async () => {
-    const response = await $fetch('/api/teacher/all-teachers', {
+const fetchTeachers = async () => {
+  const response = await $fetch('/api/teacher/all-teachers', {
       method: 'GET',
     });
     teachers.value = response.teachers as any;
+}
+
+onMounted(async () => {
+  await fetchTeachers();
 })
 
 const editTeacher = (id: string) => {
@@ -23,24 +37,6 @@ const deleteTeacher = async (id: string) => {
   });
 
   // Re-fetch the teachers after deleting one
-  const response = await $fetch('/api/teacher/all-teachers', {
-    method: 'GET',
-  });
-  teachers.value = response.teachers as any;
-}
-
-const addTeacher = async () => {
-  const teacher = {
-    firstname: 'John',
-    lastname: 'Fish',
-  };
-
-  await $fetch('/api/teacher/add', {
-    method: 'POST',
-    body: JSON.stringify(teacher),
-  });
-
-  // Re-fetch the teachers after adding one
   const response = await $fetch('/api/teacher/all-teachers', {
     method: 'GET',
   });
@@ -70,10 +66,28 @@ const addTeacher = async () => {
         </div>
       </div>
     </div>
-    <button @click="showForm = !showForm" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded w-10/12 my-2">
+    <button @click="openConfirm" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded w-10/12 my-2">
       Ajouter un enseignant
       <Icon name="uil:plus" size="20"/>
     </button>
-    <TeacherAddForm v-if="showForm"/>
+    <Teleport to="#modal">
+      <Transition>
+        <TeacherAddModal
+          v-if="modal.show.value" @close="modal.hideModal()"
+          @fetch-teachers="fetchTeachers"
+        />
+      </Transition>
+    </Teleport>
   </div>
 </template>
+
+<style scoped>
+.v-enter-active, .v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from, .v-leave-to {
+  opacity: 0;
+}
+
+</style>

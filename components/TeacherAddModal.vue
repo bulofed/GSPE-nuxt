@@ -1,0 +1,35 @@
+<template>
+    <div 
+        class="absolute inset-0 overflow-y-auto bg-black bg-opacity-50"
+        @click.self="modal.hideModal"
+    >
+        <div 
+            class="flex items-start justify-center min-h-screen mt-24 text-center"
+            @click.self="modal.hideModal"
+        >
+            <div
+                class="bg-white text-black rounded-lg text-center shadow-xl p-6 max-w-fit"
+                role="dialog"
+                aria-modal="true"
+            >
+                <div class="flex justify-center py-4 gap-4">
+                    <TeacherForm @fetch-teachers="emitFetchTeachers"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { useModal } from '~/composables/useModal'
+import TeacherForm from './TeacherForm.vue'
+
+const modal = useModal()
+
+const emit = defineEmits(['fetchTeachers'])
+
+const emitFetchTeachers = () => {
+    emit('fetchTeachers')
+}
+
+</script>

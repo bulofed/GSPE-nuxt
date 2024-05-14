@@ -3,15 +3,9 @@
 import type { ITeacher } from '~/types';
 import { useModal } from '~/composables/useModal';
 
-import TeacherAddModal from './TeacherAddModal.vue';
+import TeacherModal from './TeacherModal.vue';
 
 const modal = useModal();
-
-const openConfirm = () => {
-  modal.component.value = markRaw(TeacherAddModal);
-  modal.showModal();
-  console.log(modal.show.value);
-}
 
 const teachers = ref<ITeacher[]>([])
 
@@ -26,9 +20,16 @@ onMounted(async () => {
   await fetchTeachers();
 })
 
-const editTeacher = (id: string) => {
-  // Implement your edit logic here
-  console.log(`Editing teacher with id: ${id}`)
+const openCreateForm = () => {
+  modal.component.value = markRaw(TeacherModal);
+  modal.showModal();
+  modal.teacher_id.value = '';
+}
+
+const openEditForm = (id: string) => {
+  modal.component.value = markRaw(TeacherModal);
+  modal.showModal();
+  modal.teacher_id.value = id;
 }
 
 const deleteTeacher = async (id: string) => {
@@ -52,12 +53,12 @@ const deleteTeacher = async (id: string) => {
       v-for="teacher in teachers" :key="teacher._id.toString()"
     >
       <div class="flex justify-between mx-5 my-2 items-center">
-        <div class="flex justify-around w-full">
-          <h2 class="ml-2">{{ teacher.firstname }}</h2>
-          <h2 class="ml-2">{{ teacher.lastname }}</h2>
+        <div class="flex justify-start w-full gap-4">
+          <h2>{{ teacher.firstname }}</h2>
+          <h2>{{ teacher.lastname }}</h2>
         </div>
         <div class="flex justify-around gap-2">
-          <button @click="editTeacher(teacher._id.toString())" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <button @click="openEditForm(teacher._id.toString())" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             <Icon name="uil:edit" size="20"/>
           </button>
           <button @click="deleteTeacher(teacher._id.toString())" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
@@ -66,13 +67,13 @@ const deleteTeacher = async (id: string) => {
         </div>
       </div>
     </div>
-    <button @click="openConfirm" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded w-10/12 my-2">
+    <button @click="openCreateForm" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded w-10/12 my-2">
       Ajouter un enseignant
       <Icon name="uil:plus" size="20"/>
     </button>
     <Teleport to="#modal">
       <Transition>
-        <TeacherAddModal
+        <TeacherModal
           v-if="modal.show.value" @close="modal.hideModal()"
           @fetch-teachers="fetchTeachers"
         />

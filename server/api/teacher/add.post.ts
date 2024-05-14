@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
             })
         }
 
-        const teacher = await Teacher.create(body)
-        return teacher
+        await Teacher.create(body)
+        setResponseStatus(event, 201, 'Teacher Created')
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw createError({ statusCode: 400, statusMessage: error.message })

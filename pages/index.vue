@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 // @ts-ignore
-import Teacher from "~/components/TeachersList.vue";
+import Teacher from "~/components/TeachersComponent.vue";
 
 definePageMeta({
   middleware: "auth"
@@ -19,7 +19,7 @@ async function handleLogout() {
     <h1 class="text-xl font-bold">Bienvenue {{ (data?.user as any)?.username }}</h1>
     <button
       type="button"
-      class="bg-red-500 hover:bg-red-600 transition-all duration-200 text-red-50 rounded-lg py-2 px-5"
+      class="bg-red-500 hover:bg-red-600 transition-all duration-200 text-red-50 rounded-lg py-2 px-5 font-bold"
       @click="handleLogout"
     >
       Déconnexion

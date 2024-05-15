@@ -19,11 +19,13 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.4",
     "next-auth": "4.21.1",
     "nuxt-icon": "^0.6.10",
-    "nuxt-server-utils": "^0.0.7"
+    "nuxt-server-utils": "^0.0.7",
+    "pinia": "^2.1.7"
   }
 }

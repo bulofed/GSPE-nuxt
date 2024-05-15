@@ -36,7 +36,6 @@ var lastname = ref('');
 let teacher = ref(null);
 var action = ref('Ajouter')
 
-
 const emit = defineEmits(['fetchTeachers']);
 
 const fetchTeacher = async (id) => {

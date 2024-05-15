@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "nuxt-server-utils",
     "@sidebase/nuxt-auth",
-    "nuxt-icon"
+    "nuxt-icon",
+    '@pinia/nuxt',
   ],
 
   nuxtServerUtils: {

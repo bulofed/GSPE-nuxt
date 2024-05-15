@@ -1,15 +1,17 @@
 <template>
     <div>
         <h1 class="text-xl font-bold bg-blue-400 text-white py-2">Enseignants</h1>
-        <div v-for="teacher in teacherStore.teachers" :key="teacher._id.toString()">
-            <div class="flex justify-between mx-5 my-2 items-center">
-                <div class="flex justify-start w-full gap-4">
-                    <h2 class="w-full text-left">{{ teacher.firstname }}</h2>
-                    <h2 class="w-full text-left">{{ teacher.lastname }}</h2>
-                </div>
-                <div class="flex justify-around gap-2">
-                    <EditButton @click="openForm(teacher._id.toString())"/>
-                    <DeleteButton @click="teacherStore.deleteTeacher(teacher._id.toString())"/>
+        <div class="max-h-72 overflow-hidden overflow-y-auto">
+            <div v-for="teacher in teacherStore.teachers" :key="teacher._id.toString()">
+                <div class="flex justify-between mx-5 my-2 items-center">
+                    <div class="flex justify-start w-full gap-4">
+                        <h2 class="w-full text-left">{{ teacher.firstname }}</h2>
+                        <h2 class="w-full text-left">{{ teacher.lastname }}</h2>
+                    </div>
+                    <div class="flex justify-around gap-2">
+                        <EditButton @click="openForm(teacher._id.toString())"/>
+                        <DeleteButton @click="teacherStore.deleteTeacher(teacher._id.toString())"/>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 
 import { useModalStore } from '~/stores/modal';
-import { useTeacherStore } from '~/stores/teacher';
 
 import TeacherModal from './TeacherModal.vue';
 import TeacherList from './TeacherList.vue';
 
 const modalStore = useModalStore();
-const teacherStore = useTeacherStore();
 
 </script>
 

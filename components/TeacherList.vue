@@ -8,13 +8,13 @@
                     <h2 class="w-full text-left">{{ teacher.lastname }}</h2>
                 </div>
                 <div class="flex justify-around gap-2">
-                    <EditButton @click="openEditForm(teacher._id.toString())"/>
+                    <EditButton @click="openForm(teacher._id.toString())"/>
                     <DeleteButton @click="teacherStore.deleteTeacher(teacher._id.toString())"/>
                 </div>
             </div>
         </div>
         <button
-            @click="openCreateForm"
+            @click="openForm()"
             class="bg-blue-400 hover:bg-blue-500 transition-all duration-200 text-white font-bold py-2 px-4 rounded w-10/12 my-2"
         >
             Ajouter un enseignant
@@ -37,13 +37,7 @@ const teacherStore = useTeacherStore();
 
 onMounted(teacherStore.fetchTeachers);
 
-const openCreateForm = () => {
-    modalStore.setComponent(TeacherModal);
-    modalStore.setTeacherId('');
-    modalStore.showModal();
-};
-
-const openEditForm = (id: string) => {
+const openForm = (id: string = '') => {
     modalStore.setComponent(TeacherModal);
     modalStore.setTeacherId(id);
     modalStore.showModal();

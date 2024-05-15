@@ -19,7 +19,6 @@ const teacherStore = useTeacherStore();
         <TeacherModal
           v-if="modalStore.show"
           @close="modalStore.hideModal"
-          @fetch-teachers="teacherStore.fetchTeachers"
         />
       </Transition>
     </Teleport>

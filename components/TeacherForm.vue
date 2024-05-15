@@ -37,8 +37,6 @@ var firstname = ref('');
 var lastname = ref('');
 var action = ref('Ajouter')
 
-const emit = defineEmits(['fetchTeachers']);
-
 onMounted(async () => {
     if (modalStore.teacher_id !== '') {
         await teacherStore.fetchTeacher(modalStore.teacher_id);
@@ -62,7 +60,6 @@ const confirm = async () => {
     }
 
     modalStore.hideModal();
-    emit('fetchTeachers');
 }
 
 </script>

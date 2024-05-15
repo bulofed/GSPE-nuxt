@@ -13,7 +13,7 @@
                 aria-modal="true"
             >
                 <div class="flex justify-center py-4 gap-4">
-                    <TeacherForm @fetch-teachers="emitFetchTeachers"/>
+                    <TeacherForm />
                 </div>
             </div>
         </div>
@@ -26,11 +26,5 @@ import { useModalStore } from '~/stores/modal';
 import TeacherForm from './TeacherForm.vue'
 
 const modalStore = useModalStore()
-
-const emit = defineEmits(['fetchTeachers'])
-
-const emitFetchTeachers = () => {
-    emit('fetchTeachers')
-}
 
 </script>

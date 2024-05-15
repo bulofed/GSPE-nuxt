@@ -27,9 +27,9 @@
 
 <script setup>
 
-import { useModal } from '~/composables/useModal';
+import { useModalStore } from '~/stores/modal';
 
-const modal = useModal();
+const modal = useModalStore();
 
 var firstname = ref('');
 var lastname = ref('');
@@ -47,8 +47,8 @@ const fetchTeacher = async (id) => {
 }
 
 onMounted(async () => {
-    if (modal.teacher_id.value !== '') {
-        await fetchTeacher(modal.teacher_id.value);
+    if (modal.teacher_id !== '') {
+        await fetchTeacher(modal.teacher_id);
         action.value = 'Modifier';
         firstname.value = teacher.value.firstname;
         lastname.value = teacher.value.lastname;

@@ -1,34 +1,25 @@
 <script lang="ts" setup>
 
-import type { ITeacher } from '~/types';
-import { fetchTeachers } from '~/composables/teacherServices';
-
 import { useModalStore } from '~/stores/modal';
+import { useTeacherStore } from '~/stores/teacher';
 
 import TeacherModal from './TeacherModal.vue';
 import TeacherList from './TeacherList.vue';
 
 const modalStore = useModalStore();
-
-const teachers = ref<ITeacher[]>([])
-
-const loadTeachers = async () => {
-  teachers.value = await fetchTeachers();
-};
-
-onMounted(loadTeachers);
+const teacherStore = useTeacherStore();
 
 </script>
 
 <template>
   <div class="border rounded-xl text-center overflow-hidden">
-    <TeacherList :teachers="teachers" />
+    <TeacherList />
     <Teleport to="#modal">
       <Transition>
         <TeacherModal
           v-if="modalStore.show"
           @close="modalStore.hideModal"
-          @fetch-teachers="loadTeachers"
+          @fetch-teachers="teacherStore.fetchTeachers"
         />
       </Transition>
     </Teleport>

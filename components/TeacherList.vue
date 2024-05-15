@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="text-xl font-bold bg-blue-400 text-white py-2">Enseignants</h1>
-        <div v-for="teacher in teachers" :key="teacher._id.toString()">
+        <div v-for="teacher in teacherStore.teachers" :key="teacher._id.toString()">
             <div class="flex justify-between mx-5 my-2 items-center">
                 <div class="flex justify-start w-full gap-4">
                     <h2 class="w-full text-left">{{ teacher.firstname }}</h2>
@@ -9,7 +9,7 @@
                 </div>
                 <div class="flex justify-around gap-2">
                     <EditButton @click="openEditForm(teacher._id.toString())"/>
-                    <DeleteButton @click="handleDeleteTeacher(teacher._id.toString())"/>
+                    <DeleteButton @click="teacherStore.deleteTeacher(teacher._id.toString())"/>
                 </div>
             </div>
         </div>
@@ -24,23 +24,18 @@
 </template>
   
 <script lang="ts" setup>
-import type { ITeacher } from '~/types';
-import { fetchTeachers, deleteTeacher } from '~/composables/teacherServices';
 
 import { useModalStore } from '~/stores/modal';
+import { useTeacherStore } from '~/stores/teacher';
 
 import TeacherModal from './TeacherModal.vue';
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
 
 const modalStore = useModalStore();
-const teachers = ref<ITeacher[]>([]);
+const teacherStore = useTeacherStore();
 
-const loadTeachers = async () => {
-    teachers.value = await fetchTeachers();
-};
-
-onMounted(loadTeachers);
+onMounted(teacherStore.fetchTeachers);
 
 const openCreateForm = () => {
     modalStore.setComponent(TeacherModal);
@@ -52,10 +47,5 @@ const openEditForm = (id: string) => {
     modalStore.setComponent(TeacherModal);
     modalStore.setTeacherId(id);
     modalStore.showModal();
-};
-
-const handleDeleteTeacher = async (id: string) => {
-    await deleteTeacher(id);
-    await loadTeachers();
 };
 </script>

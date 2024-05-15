@@ -28,49 +28,40 @@
 <script setup>
 
 import { useModalStore } from '~/stores/modal';
+import { useTeacherStore } from '~/stores/teacher';
 
-const modal = useModalStore();
+const modalStore = useModalStore();
+const teacherStore = useTeacherStore();
 
 var firstname = ref('');
 var lastname = ref('');
-let teacher = ref(null);
 var action = ref('Ajouter')
 
 const emit = defineEmits(['fetchTeachers']);
 
-const fetchTeacher = async (id) => {
-
-    const response = await $fetch(`/api/teacher/${id}`, {
-        method: 'GET',
-    });
-    teacher.value = response.teacher;
-}
-
 onMounted(async () => {
-    if (modal.teacher_id !== '') {
-        await fetchTeacher(modal.teacher_id);
+    if (modalStore.teacher_id !== '') {
+        await teacherStore.fetchTeacher(modalStore.teacher_id);
         action.value = 'Modifier';
-        firstname.value = teacher.value.firstname;
-        lastname.value = teacher.value.lastname;
+        firstname.value = teacherStore.teacher.firstname;
+        lastname.value = teacherStore.teacher.lastname;
     }
 })
 
 const confirm = async () => {
-
-    const url = teacher.value && teacher.value._id ? `/api/teacher/${modal.teacher_id.value}` : '/api/teacher/add';
-    const method = teacher.value && teacher.value._id ? 'PUT' : 'POST';
 
     const teacherData = {
         firstname: firstname.value,
         lastname: lastname.value,
     }
 
-    await $fetch(url, {
-        method: method,
-        body: JSON.stringify(teacherData),
-    });
+    if (modalStore.teacher_id == '') {
+        await teacherStore.createTeacher(teacherData);
+    } else {
+        await teacherStore.updateTeacher(modalStore.teacher_id, teacherData);
+    }
 
-    modal.hideModal();
+    modalStore.hideModal();
     emit('fetchTeachers');
 }
 

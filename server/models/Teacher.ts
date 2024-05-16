@@ -6,14 +6,12 @@ const TeacherSchema = new Schema<ITeacher>({
         type: String,
         required: true,
         trim: true,
-        lowercase: true,
     },
 
     lastname: {
         type: String,
         required: true,
         trim: true,
-        lowercase: true,
     },
 }, { timestamps: true });
 

@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     "nuxt-icon",
     '@pinia/nuxt',
     'nuxt-headlessui',
-    '@nuxtjs/color-mode',
+    '@nuxtjs/color-mode'
   ],
 
   tailwindcss: {

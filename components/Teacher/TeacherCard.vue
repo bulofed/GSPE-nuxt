@@ -1,10 +1,10 @@
 <template>
-  <div class="flex justify-between mx-5 my-2 items-center gap-5">
-    <div class="flex justify-start w-full gap-4">
-      <h2 class="w-full text-left">{{ teacher.firstname }}</h2>
-      <h2 class="w-full text-left">{{ teacher.lastname }}</h2>
+  <div class="flex justify-between items-center space-x-5 align-center break-all">
+    <div class="flex flex-col md:flex-row justify-start w-full gap-4">
+      <h2 class="text-center md:text-left md:w-full">{{ teacher.firstname }}</h2>
+      <h2 class="text-center md:text-left md:w-full">{{ teacher.lastname }}</h2>
     </div>
-    <div class="flex justify-around gap-2">
+    <div class="flex flex-col md:flex-row justify-around gap-2">
       <EditButton @click="openForm(teacher._id.toString())"/>
       <ConfirmationDialog @confirm="deleteTeacher" />
     </div>
@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 
 import EditButton from '~/components/elements/EditButton.vue'
-import ConfirmationDialog from '~/components/elements/ConfirmationDialog.vue'
+import ConfirmationDialog from '~/components/Teacher/ConfirmationDialog.vue'
 
 import { useModalStore } from '~/stores/modal'
 import { useTeacherStore } from '~/stores/teacher'

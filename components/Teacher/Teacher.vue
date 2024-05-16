@@ -10,7 +10,7 @@ const modalStore = useModalStore();
 </script>
 
 <template>
-  <div class="border rounded-xl text-center overflow-hidden">
+  <div class="border rounded-xl text-center overflow-auto max-w-sm dark:border-slate-900/50 bg-slate-100 dark:bg-slate-700">
     <TeacherList />
     <Teleport to="#modal">
       <Transition>

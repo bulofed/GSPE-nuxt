@@ -10,8 +10,9 @@
     </NuxtLink>
     <div class="flex items-center gap-1">
       <button class="p-2" @click="setColorTheme($colorMode.preference == 'dark' ? 'light' : 'dark')">
-        <Icon v-if="$colorMode.preference == 'dark'" name="akar-icons:moon" size="24" class="text-slate-500 dark:text-slate-100"/>
-        <Icon v-else name="uil:sun" size="24" class="text-slate-500 dark:text-slate-100"/>
+        <Icon v-if="iconName === 'light'" name="uil:sun" size="24" class="text-slate-500 dark:text-slate-100"/>
+        <Icon v-else-if="iconName === 'dark'" name="akar-icons:moon" size="24" class="text-slate-500 dark:text-slate-100"/>
+        <Icon v-else name="ep:loading" size="24" class="text-slate-500 dark:text-slate-100"/>
       </button>
       <LogoutButton v-if="data?.user" />
     </div>
@@ -22,10 +23,19 @@
 import LogoutButton from '~/components/elements/LogoutButton.vue'
 
 const { data } = useAuth();
-
-const user = useState('user')
+const iconName = ref('system');
 
 const setColorTheme = (newTheme: string) => {
   useColorMode().preference = newTheme
 }
+
+onMounted(() => {
+  const colorMode = useColorMode();
+  colorMode.value = localStorage.getItem('nuxt-color-mode') || 'light'
+  iconName.value = colorMode.value;
+})
+
+watch(() => useColorMode().value, (newVal) => {
+  iconName.value = newVal;
+})
 </script>

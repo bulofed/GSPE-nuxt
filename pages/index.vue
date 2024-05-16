@@ -1,31 +1,21 @@
 <script lang="ts" setup>
 
-// @ts-ignore
-import Teacher from "~/components/TeachersComponent.vue";
+import Teacher from "~/components/Teacher/Teacher.vue";
+import Schedule from "~/components/Schedule/Schedule.vue";
 
 definePageMeta({
   middleware: "auth"
 })
 
-const { data, signOut } = useAuth();
-
-async function handleLogout() {
-  await signOut();
-}
+const { data } = useAuth();
 </script>
 
 <template>
-  <div class="flex items-center justify-between">
+  <div class="flex items-center">
     <h1 class="text-xl font-bold">Bienvenue {{ (data?.user as any)?.username }}</h1>
-    <button
-      type="button"
-      class="bg-red-500 hover:bg-red-600 transition-all duration-200 text-red-50 rounded-lg py-2 px-5 font-bold"
-      @click="handleLogout"
-    >
-      Déconnexion
-    </button>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    <Schedule />
     <Teacher />
   </div>
 </template>

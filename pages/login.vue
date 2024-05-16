@@ -25,7 +25,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div>
+  <div class="max-w-fit">
     <h1 class="mb-4 text-xl font-bold">Connexion</h1>
     <form @submit.prevent="handleLogin">
       <input

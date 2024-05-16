@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="absolute inset-0 overflow-y-auto bg-black bg-opacity-50"
+        class="fixed inset-0 overflow-y-hidden bg-black bg-opacity-50"
         @click.self="modalStore.hideModal"
     >
         <div 
@@ -21,6 +21,7 @@
 </template>
 
 <script setup>
+
 import { useModalStore } from '~/stores/modal';
 
 import TeacherForm from './TeacherForm.vue'

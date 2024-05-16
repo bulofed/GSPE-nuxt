@@ -12,7 +12,21 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-auth",
     "nuxt-icon",
     '@pinia/nuxt',
+    'nuxt-headlessui',
+    '@nuxtjs/color-mode',
   ],
+
+  tailwindcss: {
+    cssPath: '~/assets/css/tailwind.css',
+    configPath: 'tailwind.config.js',
+    exposeConfig: false,
+    config: {},
+    viewer: true,
+  },
+
+  colorMode: {
+    classSuffix: '',
+  },
 
   nuxtServerUtils: {
     mongodbUri: process.env.MONGODB_URI,

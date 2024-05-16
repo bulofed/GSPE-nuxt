@@ -3,28 +3,38 @@
     <PopoverButton>
       <DeleteButton />
     </PopoverButton>
-    <PopoverPanel class="absolute translate-y-2">
-      <div class="absolute bg-white size-2 rotate-45 -translate-y-1 translate-x-[1.40rem]" />
-      <div class="bg-white p-5 rounded-lg drop-shadow-lg">
-        <div class="flex flex-col gap-4">
-          <p class="text-center dark:text-slate-500">Supprimer cet enseignant ?</p>
-          <div class="flex justify-center">
-            <button
-              @click="confirm"
-              class="bg-red-400 hover:bg-red-500 transition-all duration-200 text-white font-bold py-2 px-10 rounded"
-            >
-              Oui
-            </button>
+    <TransitionRoot
+      enter="transition-opacity duration-150"
+      enter-from="opacity-0"
+      enter-to="opacity-100"
+      leave="transition-opacity duration-150"
+      leave-from="opacity-100"
+      leave-to="opacity-0"
+    >
+      <PopoverPanel class="absolute translate-y-3 right-12">
+        <div class="absolute bg-white size-2 rotate-45 -translate-y-1 right-10" />
+        <div class="bg-white p-5 rounded-lg drop-shadow-lg">
+          <div class="flex flex-col gap-4">
+            <p class="text-center dark:text-slate-500">Supprimer cet enseignant ?</p>
+            <div class="flex justify-center">
+              <button
+                @click="confirm"
+                class="bg-red-400 hover:bg-red-500 transition-all duration-200 text-white font-bold py-2 px-10 rounded"
+              >
+                Oui
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </PopoverPanel>
+      </PopoverPanel>
+    </TransitionRoot>
   </Popover>
 </template>
 
 <script lang="ts" setup>
 
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
+import { TransitionRoot } from '@headlessui/vue'
 
 import DeleteButton from '~/components/elements/DeleteButton.vue'
 

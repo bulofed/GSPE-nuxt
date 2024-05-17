@@ -31,8 +31,17 @@ onMounted(teacherStore.fetchTeachers)
           <ul>
             <li v-for="ressource in teacher.ressources" :key="ressource._id.toString()">
               <div class="flex justify-start">
-                <p class="text-left w-full">{{ ressource.name }}</p>
-                <p class="text-left w-full">{{ ressource.lessons }}</p>
+                <p class="text-left grow">{{ ressource.name }}</p>
+                <div class="flex flex-col grow">
+                  <div
+                    v-for="lesson in ressource.lessons"
+                    :key="lesson._id.toString()"
+                    class="flex flex-row justify-between"
+                  >
+                    <p>{{ lesson.name }}</p>
+                    <p>{{  lesson.hours }}h</p>
+                  </div>
+                </div>
               </div>
             </li>
           </ul>

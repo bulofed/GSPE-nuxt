@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { ITeacher } from '~/types';
+import { RessourceSchema } from './Ressource';
 
 const TeacherSchema = new Schema<ITeacher>({
     firstname: {
@@ -13,6 +14,8 @@ const TeacherSchema = new Schema<ITeacher>({
         required: true,
         trim: true,
     },
+
+    ressources: [RessourceSchema],
 }, { timestamps: true });
 
 export const Teacher = model<ITeacher>('Teacher', TeacherSchema);

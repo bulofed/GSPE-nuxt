@@ -11,11 +11,14 @@
       leave-from="opacity-100"
       leave-to="opacity-0"
     >
-      <PopoverPanel class="absolute translate-y-3 right-12">
+      <PopoverPanel class="absolute translate-y-3 right-12 max-w-80">
         <div class="absolute bg-white size-2 rotate-45 -translate-y-1 right-10" />
         <div class="bg-white p-5 rounded-lg drop-shadow-lg">
           <div class="flex flex-col gap-4">
-            <p class="text-center dark:text-slate-500">Supprimer cet enseignant ?</p>
+            <div class="space-y-1">
+              <p class="text-center dark:text-slate-700 font-bold">Supprimer cet enseignant ?</p>
+              <p class="text-justify dark:text-slate-500">Cela supprimera aussi ses leçons.</p>
+            </div>
             <div class="flex justify-center">
               <button
                 @click="confirm"

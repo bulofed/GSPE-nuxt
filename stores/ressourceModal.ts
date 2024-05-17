@@ -3,14 +3,20 @@ import { defineStore } from 'pinia';
 export const useRessourceModalStore = defineStore({
   id: 'ressourceModal',
   state: () => ({
-    show: false,
+    show: '',
+    teacher_id: '',
   }),
   actions: {
-    showModal() {
-      this.show = true;
+    showModal(modal: string) {
+      this.show = modal;
     },
-    hideModal() {
-      this.show = false;
-    }
+    hideModal(modal: string) {
+      if (this.show === modal) {
+          this.show = '';
+      }
+    },
+    setTeacherId(id: string) {
+      this.teacher_id = id;
+    },
   },
 });

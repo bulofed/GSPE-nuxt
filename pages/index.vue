@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import Teacher from "~/components/Teacher/Teacher.vue";
+import TeacherList from "~/components/Teacher/TeacherList.vue";
 import Schedule from "~/components/Schedule/Schedule.vue";
 
 definePageMeta({
@@ -16,7 +16,7 @@ const { data } = useAuth();
   </div>
   <div class="flex items-start content-start flex-col md:flex-row gap-4 mt-4">
     <Schedule />
-    <Teacher />
+    <TeacherList />
   </div>
 </template>
 

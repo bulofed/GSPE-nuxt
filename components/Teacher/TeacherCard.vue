@@ -9,6 +9,9 @@
         @click="openForm(teacher._id.toString())"
         class="bg-blue-500 hover:bg-blue-600"
       />
+      <Dialog :modalName="modal">
+        <TeacherDialog />
+      </Dialog>
       <ConfirmationDialog @confirm="deleteTeacher" />
     </div>
   </div>
@@ -18,11 +21,12 @@
 
 import EditButton from '~/components/elements/EditButton.vue'
 import ConfirmationDialog from '~/components/Teacher/ConfirmationDialog.vue'
+import Dialog from '~/components/elements/Dialog.vue';
 
-import { useModalStore } from '~/stores/modal'
 import { useTeacherStore } from '~/stores/teacher'
+import { useRessourceModalStore } from '~/stores/ressourceModal'
 
-import TeacherModal from './TeacherModal.vue';
+import TeacherDialog from './TeacherDialog.vue';
 
 const props = defineProps({
   teacher: {
@@ -31,13 +35,14 @@ const props = defineProps({
   }
 })
 
-const modalStore = useModalStore()
 const teacherStore = useTeacherStore()
+const ressourceModalStore = useRessourceModalStore()
 
-const openForm = (id: string) => {
-  modalStore.setComponent(TeacherModal)
-  modalStore.setTeacherId(id)
-  modalStore.showModal()
+const modal = 'editTeacher'
+
+const openForm = (id: string = '') => {
+  ressourceModalStore.setTeacherId(id)
+  ressourceModalStore.showModal(modal)
 }
 
 const deleteTeacher = () => {

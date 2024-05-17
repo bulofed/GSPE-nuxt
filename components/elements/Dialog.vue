@@ -1,9 +1,9 @@
 <template>
 <TransitionRoot
   appear
-  :show="ressourceModalStore.show" 
+  :show="ressourceModalStore.show === props.modalName"
   as="template">
-    <Dialog as="div" @close="ressourceModalStore.hideModal" class="relative z-10">
+    <Dialog as="div" @close="ressourceModalStore.hideModal(props.modalName)" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -51,4 +51,8 @@ import {
 import { useRessourceModalStore } from '~/stores/ressourceModal'
 
 const ressourceModalStore = useRessourceModalStore()
+
+const props = defineProps({
+  modalName: String
+})
 </script>

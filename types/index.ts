@@ -13,10 +13,10 @@ export interface IRessource {
 }
 
 export interface ITeacher {
-    _id: Types.ObjectId
+    _id?: Types.ObjectId
     firstname: string,
     lastname: string,
     ressources: IRessource[],
-    createdAt: Date,
-    updatedAt: Date
+    createdAt?: Date,
+    updatedAt?: Date
 }

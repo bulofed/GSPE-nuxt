@@ -5,7 +5,10 @@
       <h2 class="text-center md:text-left md:w-full">{{ teacher.lastname }}</h2>
     </div>
     <div class="flex flex-col md:flex-row justify-around gap-2">
-      <EditButton @click="openForm(teacher._id.toString())"/>
+      <EditButton
+        @click="openForm(teacher._id.toString())"
+        class="bg-blue-500 hover:bg-blue-600"
+      />
       <ConfirmationDialog @confirm="deleteTeacher" />
     </div>
   </div>

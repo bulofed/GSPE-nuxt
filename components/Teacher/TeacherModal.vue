@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="fixed inset-0 overflow-y-hidden bg-black bg-opacity-50 backdrop-blur-sm"
+        class="fixed inset-0 overflow-y-hidden bg-black/25 backdrop-blur-sm"
         @click.self="modalStore.hideModal"
     >
         <div 

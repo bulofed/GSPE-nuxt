@@ -9,7 +9,7 @@
         @click="openForm(teacher._id.toString())"
         class="bg-blue-500 hover:bg-blue-600"
       />
-      <Dialog :modalName="modal">
+      <Dialog :modalName="teacher._id.toString()">
         <TeacherDialog />
       </Dialog>
       <ConfirmationDialog @confirm="deleteTeacher" />
@@ -38,11 +38,9 @@ const props = defineProps({
 const teacherStore = useTeacherStore()
 const ressourceModalStore = useRessourceModalStore()
 
-const modal = 'editTeacher'
-
 const openForm = (id: string = '') => {
   ressourceModalStore.setTeacherId(id)
-  ressourceModalStore.showModal(modal)
+  ressourceModalStore.showModal(id)
 }
 
 const deleteTeacher = () => {

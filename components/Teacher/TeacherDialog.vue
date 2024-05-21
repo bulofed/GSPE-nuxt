@@ -37,7 +37,7 @@ var lastname = ref('');
 var action = ref('Ajouter')
 
 onMounted(async () => {
-  teacherStore.fetchTeachers()
+  await teacherStore.fetchTeachers()
   if (ressourceModalStore.teacher_id !== '') {
       await teacherStore.fetchTeacher(ressourceModalStore.teacher_id);
       action.value = 'Modifier';
@@ -65,5 +65,7 @@ const confirm = async () => {
   } else {
     ressourceModalStore.hideModal('addTeacher');
   }
+
+  ressourceModalStore.resetTeacherId();
 }
 </script>

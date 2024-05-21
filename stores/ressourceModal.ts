@@ -18,5 +18,8 @@ export const useRessourceModalStore = defineStore({
     setTeacherId(id: string) {
       this.teacher_id = id;
     },
+    resetTeacherId() {
+      this.teacher_id = '';
+    },
   },
 });

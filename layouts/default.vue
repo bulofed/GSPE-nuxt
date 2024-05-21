@@ -12,6 +12,5 @@ const route = useRoute()
                 <slot />
             </div>
         </div>
-        <div id="modal" />
     </div>
 </template>

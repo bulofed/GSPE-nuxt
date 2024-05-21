@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import { LessonSchema } from './Lesson';
 
-export const RessourceSchema = new Schema({
+export const ResourceSchema = new Schema({
     name: {
         type: String,
         required: true,

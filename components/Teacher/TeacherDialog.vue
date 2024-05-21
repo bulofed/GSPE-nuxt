@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center">
-    <h1 class="text-2xl font-bold text-black">{{ action }} un enseignant</h1>
+    <DialogTitle as="h2" class="text-2xl font-bold text-black">{{ action }} un enseignant</DialogTitle>
     <form class="flex flex-col gap-4 mt-4">
         <input
             v-model="firstname"
@@ -26,23 +26,34 @@
 </template>
 
 <script lang="ts" setup>
-import { useRessourceModalStore } from '~/stores/ressourceModal'
+import {
+  DialogTitle,
+} from '@headlessui/vue'
+
+import type { IResource } from '~/types'
+
+import { useModalStore } from '~/stores/modal'
 import { useTeacherStore } from '~/stores/teacher'
 
-const ressourceModalStore = useRessourceModalStore()
+const modalStore = useModalStore()
 const teacherStore = useTeacherStore()
 
-var firstname = ref('');
-var lastname = ref('');
-var action = ref('Ajouter')
+let firstname = ref('');
+let lastname = ref('');
+let resources = ref<IResource[]>([]);
+let action = ref('Ajouter')
+
+const props = defineProps({
+  modalName: String
+})
 
 onMounted(async () => {
-  await teacherStore.fetchTeachers()
-  if (ressourceModalStore.teacher_id !== '') {
-      await teacherStore.fetchTeacher(ressourceModalStore.teacher_id);
+  if (modalStore.teacher_id !== '') {
+      await teacherStore.fetchTeacher(modalStore.teacher_id);
       action.value = 'Modifier';
       firstname.value = teacherStore.teacher.firstname;
       lastname.value = teacherStore.teacher.lastname;
+      resources.value = teacherStore.teacher.resources;
   }
 })
 
@@ -51,21 +62,21 @@ const confirm = async () => {
   const teacherData = {
       firstname: firstname.value,
       lastname: lastname.value,
-      ressources: []
+      resources: resources.value
   }
 
-  if (ressourceModalStore.teacher_id == '') {
+  if (modalStore.teacher_id == '') {
       await teacherStore.createTeacher(teacherData);
   } else {
-      await teacherStore.updateTeacher(ressourceModalStore.teacher_id, teacherData);
+      await teacherStore.updateTeacher(modalStore.teacher_id, teacherData);
   }
 
-  if (ressourceModalStore.teacher_id !== '') {
-    ressourceModalStore.hideModal('editTeacher');
+  if (modalStore.teacher_id !== '' && props.modalName && props.modalName !== 'addTeacher') {
+    modalStore.hideModal(props.modalName);
   } else {
-    ressourceModalStore.hideModal('addTeacher');
+    modalStore.hideModal('addTeacher');
   }
 
-  ressourceModalStore.resetTeacherId();
+  modalStore.resetTeacherId();
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <li>
     <div class="flex justify-start">
-      <p class="text-left grow">{{ ressource.name }}</p>
+      <p class="text-left grow">{{ resource.name }}</p>
       <div class="flex flex-col grow">
         <div
-          v-for="lesson in ressource.lessons"
+          v-for="lesson in resource.lessons"
           :key="lesson._id.toString()"
           class="flex flex-row justify-between"
         >
@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-ressource: {
+resource: {
   type: Object,
   default: () => ({})
 }

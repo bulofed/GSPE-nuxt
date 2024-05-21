@@ -1,9 +1,9 @@
 <template>
 <TransitionRoot
   appear
-  :show="ressourceModalStore.show === props.modalName"
+  :show="modalStore.show === props.modalName"
   as="template">
-    <Dialog as="div" @close="ressourceModalStore.hideModal(props.modalName)" class="relative z-10">
+    <Dialog as="div" @close="modalStore.hideModal(props.modalName)" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -48,9 +48,9 @@ import {
   TransitionChild,
 } from '@headlessui/vue'
 
-import { useRessourceModalStore } from '~/stores/ressourceModal'
+import { useModalStore } from '~/stores/modal'
 
-const ressourceModalStore = useRessourceModalStore()
+const modalStore = useModalStore()
 
 const props = defineProps({
   modalName: String

@@ -33,9 +33,9 @@ import { useTeacherStore } from '~/stores/teacher';
 const modalStore = useModalStore();
 const teacherStore = useTeacherStore();
 
-var firstname = ref('');
-var lastname = ref('');
-var action = ref('Ajouter')
+let firstname = ref('');
+let lastname = ref('');
+let action = ref('Ajouter')
 
 onMounted(async () => {
     if (modalStore.teacher_id !== '') {

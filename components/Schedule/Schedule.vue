@@ -3,7 +3,7 @@
     <h1 class="text-xl font-bold p-4 w-full bg-blue-400 text-white">Planning</h1>
     <Teacher
       v-for="teacher in teacherStore.teachers"
-      :key="teacher._id.toString()"
+      :key="teacher._id!.toString()"
       :teacher="teacher"
     />
     <p class="text-right pr-4">Total heures: {{ totalHours }}h</p>
@@ -24,8 +24,8 @@ onMounted(teacherStore.fetchTeachers)
 function calculateTotalHours(teacher: ITeacher): number {
   let totalHours = 0;
 
-  for (const ressource of teacher.ressources) {
-    for (const lesson of ressource.lessons) {
+  for (const resource of teacher.resources) {
+    for (const lesson of resource.lessons) {
       totalHours += lesson.hours;
     }
   }

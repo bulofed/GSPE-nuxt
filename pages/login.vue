@@ -54,6 +54,6 @@ async function handleLogin() {
 
 <style scoped>
 .placeholder-color::placeholder {
-  color: rgb(71 85 105 / var(--tw-text-opacity));
+  color: rgb(71 85 105 / let(--tw-text-opacity));
 }
 </style>

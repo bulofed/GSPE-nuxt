@@ -5,7 +5,7 @@
       <div class="ml-auto">
         <AddButton @click="openForm()" />
         <Dialog :modalName="modal">
-          <TeacherDialog />
+          <TeacherDialog :modalName="modal"/>
         </Dialog>
       </div>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRessourceModalStore } from '~/stores/ressourceModal'
+import { useModalStore } from '~/stores/modal'
 import { useTeacherStore } from '~/stores/teacher'
 
 import TeacherCard from './TeacherCard.vue'
@@ -29,14 +29,14 @@ import TeacherDialog from './TeacherDialog.vue';
 import AddButton from '~/components/elements/AddButton.vue'
 import Dialog from '~/components/elements/Dialog.vue';
 
-const ressourceModalStore = useRessourceModalStore()
+const modalStore = useModalStore()
 const teacherStore = useTeacherStore()
 
 const modal = 'addTeacher'
 
 const openForm = (id: string = '') => {
-  ressourceModalStore.setTeacherId(id)
-  ressourceModalStore.showModal(modal)
+  modalStore.setTeacherId(id)
+  modalStore.showModal(modal)
 }
 
 </script>

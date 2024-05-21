@@ -6,7 +6,7 @@ export interface ILesson {
     hours: number
 }
 
-export interface IRessource {
+export interface IResource {
     _id: Types.ObjectId
     name: string,
     lessons: ILesson[]
@@ -16,7 +16,7 @@ export interface ITeacher {
     _id?: Types.ObjectId
     firstname: string,
     lastname: string,
-    ressources: IRessource[],
+    resources: IResource[],
     createdAt?: Date,
     updatedAt?: Date
 }

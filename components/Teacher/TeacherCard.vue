@@ -6,11 +6,11 @@
     </div>
     <div class="flex flex-col md:flex-row justify-around gap-2">
       <EditButton
-        @click="openForm(id)"
+        @click="openForm(modalId)"
         class="bg-blue-500 hover:bg-blue-600"
       />
-      <Dialog :modalName="id">
-        <TeacherDialog />
+      <Dialog :modalName="modalId">
+        <TeacherDialog :modalName="modalId"/>
       </Dialog>
       <ConfirmationDialog @confirm="deleteTeacher" />
     </div>
@@ -24,7 +24,7 @@ import ConfirmationDialog from '~/components/Teacher/ConfirmationDialog.vue'
 import Dialog from '~/components/elements/Dialog.vue';
 
 import { useTeacherStore } from '~/stores/teacher'
-import { useRessourceModalStore } from '~/stores/ressourceModal'
+import { useModalStore } from '~/stores/modal'
 
 import TeacherDialog from './TeacherDialog.vue';
 
@@ -35,14 +35,15 @@ const props = defineProps({
   }
 })
 
-let id = ("Edit Teacher " + props.teacher._id.toString())
+let teacherId = props.teacher._id.toString()
+let modalId = ("Edit Teacher " + teacherId)
 
 const teacherStore = useTeacherStore()
-const ressourceModalStore = useRessourceModalStore()
+const modalStore = useModalStore()
 
 const openForm = (id: string = '') => {
-  ressourceModalStore.setTeacherId(id)
-  ressourceModalStore.showModal(id)
+  modalStore.setTeacherId(teacherId)
+  modalStore.showModal(modalId)
 }
 
 const deleteTeacher = () => {

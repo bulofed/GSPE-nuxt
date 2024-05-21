@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
-export const useRessourceModalStore = defineStore({
-  id: 'ressourceModal',
+export const useModalStore = defineStore({
+  id: 'resourceModal',
   state: () => ({
     show: '',
     teacher_id: '',

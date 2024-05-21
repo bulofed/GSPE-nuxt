@@ -47,6 +47,19 @@ export const useTeacherStore = defineStore({
             body: JSON.stringify(teacher),
         });
         await this.fetchTeachers();
+    },
+    async fetchAllTeachersResources() {
+      const response = await $fetch<ITeacherResponse>('/api/teacher/all-teachers', {
+        method: 'GET',
+      });
+      const teachers = response.teachers as ITeacher[];
+      const resources = new Set<string>();
+      for (const teacher of teachers) {
+          for (const resource of teacher.resources) {
+              resources.add(resource.name);
+          }
+      }
+      return Array.from(resources);
     }
   },
 });

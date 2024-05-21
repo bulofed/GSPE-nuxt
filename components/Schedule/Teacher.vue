@@ -9,8 +9,8 @@
       />
       <h2>{{ teacher.firstname }} {{ teacher.lastname }}</h2>
       <div class="ml-auto">
-        <AddButton @click.stop="ressourceModalStore.showModal(modal)"/>
-        <Dialog :modalName="modal">
+        <AddButton @click.stop="ressourceModalStore.showModal(id)"/>
+        <Dialog :modalName="id">
           <DialogTitle
             as="h3"
             class="text-lg font-medium leading-6 text-gray-900"
@@ -28,7 +28,7 @@
             <button
               type="button"
               class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-              @click="ressourceModalStore.hideModal(modal)"
+              @click="ressourceModalStore.hideModal(id)"
             >
               Got it, thanks!
             </button>
@@ -55,18 +55,16 @@ import Ressource from './Ressource.vue';
 import AddButton from '~/components/elements/AddButton.vue';
 import Dialog from '~/components/elements/Dialog.vue';
 
-import type { ITeacher } from '~/types'
-
 import { useRessourceModalStore } from '~/stores/ressourceModal'
 
 const ressourceModalStore = useRessourceModalStore()
 
-const modal = 'ressource'
-
 const props = defineProps({
-teacher: {
-  type: Object as () => ITeacher,
-  default: () => ({})
-}
+  teacher: {
+    type: Object,
+    default: () => ({})
+  }
 })
+
+let id = ("Add Ressource " + props.teacher._id.toString())
 </script>

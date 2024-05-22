@@ -1,7 +1,7 @@
 import { Types } from "mongoose"
 
 export interface ILesson {
-    _id: Types.ObjectId
+    _id?: Types.ObjectId
     name: string,
     hours: number
 }

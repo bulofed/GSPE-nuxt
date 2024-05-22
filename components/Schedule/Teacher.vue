@@ -11,23 +11,24 @@
       <div class="ml-auto">
         <AddButton @click.stop="modalStore.showModal(modalId)" class="text-slate-600 dark:text-white"/>
         <Dialog :modalName="modalId">
-          <AddResourceModal :modalName="modalId" :teacherId="teacher._id"/>
+          <AddResourceModal :modalName="modalId" :teacherId="teacherId"/>
         </Dialog>
       </div>
     </DisclosureButton>
-    <DisclosurePanel class="dark:text-slate-200 px-4">
-      <ul class="my-2">
-        <Resource
-          v-for="resource in teacher.resources"
-          :key="resource._id.toString()"
-          :resource="resource"
-        />
-      </ul>
+    <DisclosurePanel class="dark:text-slate-100" as="ul">
+      <Resource
+        v-for="resource in teacher.resources"
+        :key="resource._id ? resource._id.toString() : ''"
+        :resource="resource"
+        :teacherId="teacherId"
+      />
     </DisclosurePanel>
   </Disclosure>
 </template>
 
 <script lang="ts" setup>
+import type { ITeacher } from '~/types';
+
 import {
   Disclosure,
   DisclosureButton,
@@ -43,11 +44,11 @@ let modalStore = useModalStore()
 
 const props = defineProps({
   teacher: {
-    type: Object,
+    type: Object as () => ITeacher,
     default: () => ({})
   }
 })
 
-let teacherId = props.teacher._id.toString()
+let teacherId = props.teacher._id ? props.teacher._id.toString() : ''
 let modalId = ("Add Resource " + teacherId)
 </script>

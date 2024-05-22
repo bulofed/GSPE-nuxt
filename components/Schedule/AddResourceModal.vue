@@ -6,11 +6,23 @@
     >
       Ajouter une ressource
     </DialogTitle>
-    <div class="mt-5 w-full">
-      <Combobox v-model="selectedResource">
-        <ResourceSearchInput />
-        <ResourceOptions :teacherId="props.teacherId"/>
+    <div class="mt-5 w-full flex items-center">
+      <Combobox v-model="selectedResource" v-if="!isAdding">
+        <div class="flex flex-col flex-grow">
+          <ResourceSearchInput />
+          <ResourceOptions :teacherId="props.teacherId"/>
+        </div>
       </Combobox>
+      <input
+        v-model="query"
+        v-else
+        class="border border-gray-300 rounded p-2 flex-grow h-10"
+        placeholder="Nom de la ressource"
+      />
+      <AddButton
+        class="ml-2 text-slate-600"
+        @click="isAdding = !isAdding"
+      />
     </div>
 
     <div class="mt-5 w-full">
@@ -30,6 +42,8 @@ import {
   Combobox,
   DialogTitle
 } from '@headlessui/vue'
+
+import AddButton from '~/components/elements/AddButton.vue';
 
 import ResourceSearchInput from './ResourceSearchInput.vue'
 import ResourceOptions from './ResourceOptions.vue'
@@ -52,13 +66,19 @@ let selectedResource = ref(missingResources.length > 0 ? missingResources[0] : '
 const query = ref('')
 provide('query', query)
 
+const isAdding = ref(false)
+
 const confirm = async () => {
-  if (!selectedResource.value || !props.teacherId) {
+  if (!props.teacherId || !props.modalName || !selectedResource.value) {
     return
   }
-  await teacherStore.addResourceToTeacher(props.teacherId, selectedResource.value)
-  if (props.modalName) {
-    modalStore.hideModal(props.modalName)
+
+  if (query.value) {
+    await teacherStore.addResourceToTeacher(props.teacherId, query.value)
   }
+
+  await teacherStore.addResourceToTeacher(props.teacherId, selectedResource.value)
+
+  modalStore.hideModal(props.modalName)
 }
 </script>

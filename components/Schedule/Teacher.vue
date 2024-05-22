@@ -16,7 +16,7 @@
       </div>
     </DisclosureButton>
     <DisclosurePanel class="dark:text-slate-200 px-4">
-      <ul>
+      <ul class="my-2">
         <Resource
           v-for="resource in teacher.resources"
           :key="resource._id.toString()"

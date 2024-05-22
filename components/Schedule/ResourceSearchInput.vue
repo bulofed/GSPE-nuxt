@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+  <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left sm:text-sm">
     <ComboboxInput
-    class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+    class="w-full h-10 py-3 pl-3 pr-10 text-sm leading-5 text-gray-900 bg-slate-100"
     @change="query = $event.target.value"
     placeholder="Rechercher une ressource"
     

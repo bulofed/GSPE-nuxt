@@ -1,6 +1,6 @@
 <template>
   <li>
-    <div class="flex justify-start">
+    <div class="flex justify-start py-2">
       <p class="text-left grow">{{ resource.name }}</p>
       <div class="flex flex-col grow">
         <div

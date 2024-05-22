@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .input {
+    @apply border border-gray-300 bg-transparent rounded text-slate-100 focus:border-transparent focus:ring focus:ring-blue-500 focus:outline-none p-1 text-center;
+  }
+}

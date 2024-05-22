@@ -8,11 +8,19 @@
         <Icon
           v-if="resource.lessons.length > 0"
           name="mdi:chevron-up"
-          class="absolute inset-y-auto left-6 transition-all duration-200"
+          class="absolute inset-y-0 my-auto left-6 transition-all duration-200"
           :class="open && 'rotate-180 transform'"
           size="24"
         />
-        <span>{{ resource.name }}</span>
+        <input
+          type="text"
+          v-model="resource.name"
+          class="input flex-grow border-none"
+          @click.stop
+          @blur="updateResource(resource)"
+          @keyup.enter="updateResource(resource)"
+          placeholder="Nom de la ressource"
+        />
       </DisclosureButton>
       <Transition>
         <DisclosurePanel as="ul">
@@ -24,15 +32,16 @@
             <input
               type="text"
               v-model="lesson.name"
-              class="border border-gray-300 bg-transparent rounded flex-grow text-slate-100 focus:border-transparent focus:ring focus:ring-blue-500 focus:outline-none p-1"
-              placeholder="Nom de la leçon"
+              class="input flex-grow"
               @blur="updateLesson(lesson)"
               @keyup.enter="updateLesson(lesson)"
+              placeholder="Nom de la leçon"
             />
             <input
               type="number"
+              min="1"
               v-model="lesson.hours"
-              class="border border-gray-300 bg-transparent rounded flex-grow text-slate-100 focus:border-transparent focus:ring focus:ring-blue-500 focus:outline-none p-1"
+              class="input flex-grow"
               placeholder="Durée"
               @blur="updateLesson(lesson)"
               @keyup.enter="updateLesson(lesson)"
@@ -67,6 +76,26 @@ teacherId: {
   default: ''
 }
 })
+
+const updateResource = async (resource: IResource) => {
+  let teacher = await teacherStore.fetchTeacher(props.teacherId)
+  let newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.map(existingResource => {
+      if (existingResource._id?.toString() === resource._id?.toString()) {
+        return resource
+      } else {
+        return existingResource
+      }
+    })
+  }
+
+  if (newTeacher == teacher) {
+    return
+  }
+
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
+}
 
 const updateLesson = async (lesson: ILesson) => {
   let teacher = await teacherStore.fetchTeacher(props.teacherId)

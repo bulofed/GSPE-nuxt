@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { ITeacher } from '~/types';
+import type { ITeacher, ILesson } from '~/types';
 
 interface ITeacherResponse {
   teachers: ITeacher[];
@@ -72,7 +72,6 @@ export const useTeacherStore = defineStore({
       let teacher = await this.fetchTeacher(id);
       let teacherInfo = { ...teacher, resources: [...teacher.resources, { name: resource, lessons: [] }] };
       await this.updateTeacher(id, teacherInfo);
-      await this.fetchTeachers();
     },
   },
   

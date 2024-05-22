@@ -1,19 +1,41 @@
 <template>
   <Disclosure v-slot="{ open }">
-    <DisclosureButton class="grid grid-cols-3 p-2 w-full bg-slate-200 dark:bg-slate-600 border-b border-slate-100 dark:border-slate-700 rounded-md dark:text-slate-200 font-medium items-center">
+    <DisclosureButton
+      class="relative w-full py-2 bg-slate-500 rounded-md border-b border-slate-600 text-slate-100"
+      :class="teacher.resources.length == 0 && 'cursor-default'"
+    >
       <Icon
+      v-if="teacher.resources.length > 0"
         name="mdi:chevron-up"
         :class="open && 'rotate-180 transform'"
-        class="transition-all duration-200 mr-auto"
+        class="absolute inset-y-0 my-auto left-6 transition-all duration-200"
         size="24"
       />
-      <h2>{{ teacher.firstname }} {{ teacher.lastname }}</h2>
-      <div class="ml-auto">
-        <AddButton @click.stop="modalStore.showModal(modalId)" class="text-slate-600 dark:text-white"/>
-        <Dialog :modalName="modalId">
-          <AddResourceModal :modalName="modalId" :teacherId="teacherId"/>
-        </Dialog>
-      </div>
+      <input
+        type="text"
+        v-model="teacher.firstname"
+        class="input flex-grow border-none"
+        @click.stop
+        @blur="updateTeacher(teacher)"
+        @keyup.enter="updateTeacher(teacher)"
+        placeholder="Nom de l'enseignant"
+      />
+      <input
+        type="text"
+        v-model="teacher.lastname"
+        class="input flex-grow border-none"
+        @click.stop
+        @blur="updateTeacher(teacher)"
+        @keyup.enter="updateTeacher(teacher)"
+        placeholder="Prénom de l'enseignant"
+      />
+      <AddButton
+        @click.stop="modalStore.showModal(modalId)"
+        class="absolute inset-y-0 my-auto right-6"
+      />
+      <Dialog :modalName="modalId">
+        <AddResourceModal :modalName="modalId" :teacherId="teacherId"/>
+      </Dialog>
     </DisclosureButton>
     <DisclosurePanel class="dark:text-slate-100" as="ul">
       <Resource
@@ -41,6 +63,7 @@ import AddButton from '~/components/elements/AddButton.vue';
 import Dialog from '~/components/elements/Dialog.vue';
 
 let modalStore = useModalStore()
+let teacherStore = useTeacherStore()
 
 const props = defineProps({
   teacher: {
@@ -51,4 +74,16 @@ const props = defineProps({
 
 let teacherId = props.teacher._id ? props.teacher._id.toString() : ''
 let modalId = ("Add Resource " + teacherId)
+
+function updateTeacher(teacher: ITeacher) {
+  if (!teacher._id) return
+
+  let teacherData = {
+    firstname: teacher.firstname,
+    lastname: teacher.lastname,
+    resources: teacher.resources
+  }
+
+  teacherStore.updateTeacher(teacherId, teacherData)
+}
 </script>

@@ -9,9 +9,9 @@
       />
       <h2>{{ teacher.firstname }} {{ teacher.lastname }}</h2>
       <div class="ml-auto">
-        <AddButton @click.stop="modalStore.showModal(modalId)"/>
+        <AddButton @click.stop="modalStore.showModal(modalId)" class="text-slate-600 dark:text-white"/>
         <Dialog :modalName="modalId">
-          <AddResourceModal :modalName="modalId"/>
+          <AddResourceModal :modalName="modalId" :teacherId="teacher._id"/>
         </Dialog>
       </div>
     </DisclosureButton>

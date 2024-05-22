@@ -12,12 +12,10 @@
       <button
         class="p-2 text-slate-500 dark:text-slate-100"
         @click="setColorTheme($colorMode.preference == 'dark' ? 'light' : 'dark')"
-        :disabled="iconName === 'system'"
-        :class="{'cursor-wait': iconName === 'system'}"
       >
         <Icon v-if="iconName === 'light'" name="uil:sun" size="24"/>
         <Icon v-else-if="iconName === 'dark'" name="akar-icons:moon" size="24"/>
-        <Icon v-else name="ep:loading" size="24"/>
+        <Icon v-else name="uil:laptop" size="24"/>
       </button>
       <LogoutButton v-if="data?.user" />
     </div>

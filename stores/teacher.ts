@@ -21,12 +21,14 @@ export const useTeacherStore = defineStore({
             method: 'GET',
         });
         this.teachers = response.teachers as ITeacher[];
+        return this.teachers;
     },
     async fetchTeacher(id: string) {
         const response = await $fetch<ISingleTeacherResponse>(`/api/teacher/${id}`, {
             method: 'GET',
         });
         this.teacher = response.teacher as ITeacher;
+        return this.teacher;
     },
     async deleteTeacher(id: string) {
         await $fetch(`/api/teacher/${id}`, {
@@ -49,17 +51,29 @@ export const useTeacherStore = defineStore({
         await this.fetchTeachers();
     },
     async fetchAllTeachersResources() {
-      const response = await $fetch<ITeacherResponse>('/api/teacher/all-teachers', {
-        method: 'GET',
-      });
-      const teachers = response.teachers as ITeacher[];
+      const teachers = await this.fetchTeachers();
       const resources = new Set<string>();
-      for (const teacher of teachers) {
-          for (const resource of teacher.resources) {
+      for (let teacher of teachers) {
+          for (let resource of teacher.resources) {
               resources.add(resource.name);
           }
       }
       return Array.from(resources);
-    }
+    },
+    async fetchMissingResourcesForTeacher(id: string) {
+      const allResources = await this.fetchAllTeachersResources();
+      const teacher = await this.fetchTeacher(id);
+      const teacherResources = teacher.resources.map(resource => resource.name);
+      const missingResources = allResources.filter(resource => !teacherResources.includes(resource));
+    
+      return missingResources;
+    },
+    async addResourceToTeacher(id: string, resource: string) {
+      let teacher = await this.fetchTeacher(id);
+      let teacherInfo = { ...teacher, resources: [...teacher.resources, { name: resource, lessons: [] }] };
+      await this.updateTeacher(id, teacherInfo);
+      await this.fetchTeachers();
+    },
   },
+  
 });

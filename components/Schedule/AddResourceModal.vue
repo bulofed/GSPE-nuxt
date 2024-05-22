@@ -6,39 +6,59 @@
     >
       Ajouter une ressource
     </DialogTitle>
-    <div class="mt-2">
-      <p 
-      v-for="resource in resourceList"
-      class="text-sm text-gray-500">
-        {{ resource }}
-      </p>
+    <div class="mt-5 w-full">
+      <Combobox v-model="selectedResource">
+        <ResourceSearchInput />
+        <ResourceOptions :teacherId="props.teacherId"/>
+      </Combobox>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-5 w-full">
       <button
         type="button"
-        class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-        @click="hideModal"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 w-full rounded"
+        @click="confirm"
       >
-        Got it, thanks!
+        Confirmer
       </button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import {
+  Combobox,
+  DialogTitle
+} from '@headlessui/vue'
+
+import ResourceSearchInput from './ResourceSearchInput.vue'
+import ResourceOptions from './ResourceOptions.vue'
+
 let modalStore = useModalStore()
 let teacherStore = useTeacherStore()
 
 const props = defineProps({
-  modalName: String
+  modalName: String,
+  teacherId: String
 })
 
-const hideModal = () => {
+if (!props.teacherId) {
+  throw new Error('Teacher ID is required')
+}
+
+let missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
+let selectedResource = ref(missingResources.length > 0 ? missingResources[0] : '')
+
+const query = ref('')
+provide('query', query)
+
+const confirm = async () => {
+  if (!selectedResource.value || !props.teacherId) {
+    return
+  }
+  await teacherStore.addResourceToTeacher(props.teacherId, selectedResource.value)
   if (props.modalName) {
     modalStore.hideModal(props.modalName)
   }
 }
-
-let resourceList = await teacherStore.fetchAllTeachersResources()
 </script>

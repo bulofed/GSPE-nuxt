@@ -8,6 +8,16 @@ definePageMeta({
 })
 
 const { data } = useAuth();
+
+useSeoMeta({
+  title: 'GSPE',
+})
+
+useHead({
+  htmlAttrs: {
+    lang: 'fr'
+  },
+})
 </script>
 
 <template>

@@ -7,7 +7,7 @@ export interface ILesson {
 }
 
 export interface IResource {
-    _id: Types.ObjectId
+    _id?: Types.ObjectId
     name: string,
     lessons: ILesson[]
 }

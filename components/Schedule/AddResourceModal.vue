@@ -69,7 +69,7 @@ provide('query', query)
 const isAdding = ref(false)
 
 const confirm = async () => {
-  if (!props.teacherId || !props.modalName || !selectedResource.value) {
+  if (!props.teacherId || !props.modalName) {
     return
   }
 
@@ -77,7 +77,9 @@ const confirm = async () => {
     await teacherStore.addResourceToTeacher(props.teacherId, query.value)
   }
 
-  await teacherStore.addResourceToTeacher(props.teacherId, selectedResource.value)
+  if (selectedResource.value) {
+    await teacherStore.addResourceToTeacher(props.teacherId, selectedResource.value)
+  }
 
   modalStore.hideModal(props.modalName)
 }

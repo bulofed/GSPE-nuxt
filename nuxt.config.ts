@@ -13,7 +13,8 @@ export default defineNuxtConfig({
     "nuxt-icon",
     '@pinia/nuxt',
     'nuxt-headlessui',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    "@nuxtjs/google-fonts"
   ],
 
   tailwindcss: {
@@ -36,6 +37,12 @@ export default defineNuxtConfig({
     baseURL: process.env.AUTH_ORIGIN,
     provider: {
       type: 'authjs'
+    }
+  },
+
+  googleFonts: {
+    families: {
+      Lato: true,
     }
   }
 });

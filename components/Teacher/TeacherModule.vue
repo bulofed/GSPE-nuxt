@@ -1,7 +1,7 @@
 <template>
   <div class="border rounded-xl text-center overflow-auto dark:border-slate-900/50 bg-slate-100 dark:bg-slate-700 basis-1/3">
-    <div class="grid grid-cols-3 items-center bg-blue-400 text-white p-2">
-      <h1 class="col-start-2 text-center text-xl font-bold grow">Enseignants</h1>
+    <div class="grid grid-cols-3 items-center bg-blue-400 text-white px-2">
+      <ModuleTitle class="col-start-2">Enseignants</ModuleTitle>
       <div class="ml-auto">
         <AddButton @click="openForm()" />
         <Dialog :modalName="modal">
@@ -26,6 +26,7 @@ import { useTeacherStore } from '~/stores/teacher'
 
 import TeacherCard from './TeacherCard.vue'
 import TeacherDialog from './TeacherDialog.vue';
+import ModuleTitle from '../elements/ModuleTitle.vue';
 import AddButton from '~/components/elements/AddButton.vue'
 import Dialog from '~/components/elements/Dialog.vue';
 

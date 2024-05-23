@@ -1,34 +1,37 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-      class="w-full grid grid-cols-4 py-2 bg-slate-500 rounded-md border-b border-slate-600 justify-between items-center px-6 text-slate-100"
+      class="w-full grid grid-cols-3 py-2 bg-slate-500 rounded-md border-b dark:border-slate-600 justify-between items-center px-6 text-slate-100"
       :class="teacher.resources.length == 0 && 'cursor-default'"
     >
       <Icon
       v-if="teacher.resources.length > 0"
-        name="mdi:chevron-up"
+        name="mdi:chevron-down"
         :class="open && 'rotate-180 transform'"
-        class="transition-all duration-200 justify-self-start"
+        class="transition-all duration-200 justify-self-start h-min"
         size="24"
       />
-      <input
-        type="text"
-        v-model="teacher.firstname"
-        class="input border-none col-start-2"
-        @click.stop
-        @blur="updateTeacher(teacher)"
-        @keyup.enter="updateTeacher(teacher)"
-        placeholder="Nom de l'enseignant"
-      />
-      <input
-        type="text"
-        v-model="teacher.lastname"
-        class="input border-none"
-        @click.stop
-        @blur="updateTeacher(teacher)"
-        @keyup.enter="updateTeacher(teacher)"
-        placeholder="Prénom de l'enseignant"
-      />
+      <div class="flex items-center col-start-2">
+        <input
+          type="text"
+          v-model="teacher.firstname"
+          class="input border-none flex-1"
+          @click.stop
+          @blur="updateTeacher(teacher)"
+          @keyup.enter="updateTeacher(teacher)"
+          placeholder="Nom de l'enseignant"
+        />
+        <input
+          type="text"
+          v-model="teacher.lastname"
+          class="input border-none flex-1"
+          @click.stop
+          @blur="updateTeacher(teacher)"
+          @keyup.enter="updateTeacher(teacher)"
+          placeholder="Prénom de l'enseignant"
+        />
+        <p v-if="teacher.resources.length > 0" class="text-right">{{ totalHours }}h</p>
+      </div>
       <AddButton
         @click.stop="modalStore.showModal(modalId)"
         class="justify-self-end hover:bg-black/10"
@@ -86,4 +89,10 @@ function updateTeacher(teacher: ITeacher) {
 
   teacherStore.updateTeacher(teacherId, teacherData)
 }
+
+const totalHours = computed(() => {
+  return props.teacher.resources.reduce((total, resource) => {
+    return total + resource.lessons.reduce((total, lesson) => total + lesson.hours, 0)
+  }, 0)
+})
 </script>

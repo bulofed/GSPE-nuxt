@@ -6,7 +6,7 @@
     >
       Ajouter une ressource
     </DialogTitle>
-    <div class="mt-5 w-full flex items-center">
+    <div class="mt-5 w-full flex items-start">
       <Combobox v-model="selectedResource" v-if="!isAdding">
         <div class="flex flex-col flex-grow">
           <ResourceSearchInput />

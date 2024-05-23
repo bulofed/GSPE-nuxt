@@ -1,9 +1,12 @@
 <template>
   <div class="border rounded-xl text-center overflow-auto dark:border-slate-900/50 bg-slate-100 dark:bg-slate-700 basis-1/3">
-    <div class="grid grid-cols-3 items-center bg-blue-400 text-white px-2">
+    <div class="grid grid-cols-3 items-center bg-indigo-300 text-white px-2">
       <ModuleTitle class="col-start-2">Enseignants</ModuleTitle>
       <div class="ml-auto">
-        <AddButton @click="openForm()" />
+        <AddButton
+          @click="openForm()"
+          class="hover:bg-black/10"
+        />
         <Dialog :modalName="modal">
           <TeacherDialog :modalName="modal"/>
         </Dialog>

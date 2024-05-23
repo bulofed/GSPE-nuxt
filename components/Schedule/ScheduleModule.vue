@@ -1,11 +1,13 @@
 <template>
-  <div class="border rounded-xl text-center overflow-hidden dark:border-slate-900/50 bg-slate-100 dark:bg-slate-700 basis-2/3">
+  <div class="border rounded-xl text-center overflow-hidden dark:border-slate-900/50 bg-slate-100 dark:bg-slate-700 col-span-4">
     <ModuleTitle>Planning</ModuleTitle>
-    <Teacher
-      v-for="teacher in teacherStore.teachers"
-      :key="teacher._id!.toString()"
-      :teacher="teacher"
-    />
+    <div class="max-h-[40rem] overflow-y-auto">
+      <Teacher
+        v-for="teacher in teacherStore.teachers"
+        :key="teacher._id!.toString()"
+        :teacher="teacher"
+      />
+    </div>
     <p class="text-right pr-4">Total heures: {{ totalHours }}h</p>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <Popover>
     <PopoverButton>
-      <DeleteButton class="bg-red-500 hover:bg-red-600"/>
+      <DeleteButton class="bg-red-500 hover:bg-red-600 text-slate-100 rounded-md"/>
     </PopoverButton>
     <TransitionRoot
       enter="transition-opacity duration-150"

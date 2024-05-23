@@ -1,7 +1,8 @@
 <template>
   <button
-    class="hover:bg-black/10 transition-all duration-200 font-bold size-10 rounded-full"
+    class="btn"
   >
-    <Icon name="uil:plus" size="20"/>
+    <Icon name="ic:baseline-plus" size="20"/>
+    <slot />
   </button>
 </template>

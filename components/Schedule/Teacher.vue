@@ -1,20 +1,20 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-      class="relative w-full py-2 bg-slate-500 rounded-md border-b border-slate-600 text-slate-100"
+      class="w-full grid grid-cols-4 py-2 bg-slate-500 rounded-md border-b border-slate-600 justify-between items-center px-6 text-slate-100"
       :class="teacher.resources.length == 0 && 'cursor-default'"
     >
       <Icon
       v-if="teacher.resources.length > 0"
         name="mdi:chevron-up"
         :class="open && 'rotate-180 transform'"
-        class="absolute inset-y-0 my-auto left-6 transition-all duration-200"
+        class="transition-all duration-200 justify-self-start"
         size="24"
       />
       <input
         type="text"
         v-model="teacher.firstname"
-        class="input flex-grow border-none"
+        class="input border-none col-start-2"
         @click.stop
         @blur="updateTeacher(teacher)"
         @keyup.enter="updateTeacher(teacher)"
@@ -23,7 +23,7 @@
       <input
         type="text"
         v-model="teacher.lastname"
-        class="input flex-grow border-none"
+        class="input border-none"
         @click.stop
         @blur="updateTeacher(teacher)"
         @keyup.enter="updateTeacher(teacher)"
@@ -31,7 +31,7 @@
       />
       <AddButton
         @click.stop="modalStore.showModal(modalId)"
-        class="absolute inset-y-0 my-auto right-6"
+        class="justify-self-end hover:bg-black/10"
       />
       <Dialog :modalName="modalId">
         <AddResourceModal :modalName="modalId" :teacherId="teacherId"/>

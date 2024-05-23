@@ -2,25 +2,46 @@
   <li>
     <Disclosure v-slot="{ open }">
       <DisclosureButton
-        class="relative w-full py-2 bg-slate-400 rounded-md border-b border-slate-600"
-        :class="resource.lessons.length == 0 && 'cursor-default'"
+        class="w-full py-2 bg-slate-400 rounded-md border-b border-slate-600 grid grid-cols-3 justify-center items-center px-12 cursor-default text-slate-100"
+        :class="resource.lessons.length > 0 && 'cursor-pointer justify-between'"
       >
         <Icon
           v-if="resource.lessons.length > 0"
           name="mdi:chevron-up"
-          class="absolute inset-y-0 my-auto left-6 transition-all duration-200"
-          :class="open && 'rotate-180 transform'"
+          class="transition-all duration-200"
+          :class="open && 'rotate-180 transform justify-self-start'"
           size="24"
         />
         <input
           type="text"
           v-model="resource.name"
-          class="input flex-grow border-none"
+          class="input border-none col-start-2"
           @click.stop
           @blur="updateResource(resource)"
           @keyup.enter="updateResource(resource)"
           placeholder="Nom de la ressource"
         />
+        <Menu as="div" class="relative inline-block justify-self-end">
+          <MenuButton class="btn hover:bg-black/10">
+            <Icon name="ic:baseline-more-vert" size="20"/>
+          </MenuButton>
+          <MenuItems
+            class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-10 text-gray-900"
+          >
+            <div class="p-1">
+              <MenuItem as="div" v-slot="{ active }">
+                <button
+                  class="group flex w-full items-center rounded-md px-2 py-2 text-sm"
+                  :class="active ? 'bg-indigo-400 text-white' : 'text-gray-900'"
+                  @click="deleteResource(resource)"
+                >
+                  <Icon name="ic:baseline-delete" class="mr-2 text-indigo-300 size-5" :active="active"/>
+                  Supprimer
+                </button>
+              </MenuItem>
+            </div>
+          </MenuItems>
+        </Menu>
       </DisclosureButton>
       <Transition>
         <DisclosurePanel as="ul">
@@ -60,7 +81,13 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem
 } from '@headlessui/vue'
+
+import AddButton from '~/components/elements/AddButton.vue'
 
 import { useTeacherStore } from '~/stores/teacher'
 
@@ -123,6 +150,16 @@ const updateLesson = async (lesson: ILesson) => {
     return
   }
   
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
+}
+
+const deleteResource = async (resource: IResource) => {
+  let teacher = await teacherStore.fetchTeacher(props.teacherId)
+  let newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.filter(existingResource => existingResource._id?.toString() !== resource._id?.toString())
+  }
+
   await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 

@@ -19,8 +19,14 @@
         class="border border-gray-300 rounded p-2 flex-grow h-10"
         placeholder="Nom de la ressource"
       />
-      <AddButton
-        class="ml-2 text-slate-600"
+      <EditButton
+        v-if="!isAdding"
+        class="ml-2 text-slate-600 hover:bg-black/10"
+        @click="isAdding = !isAdding"
+      />
+      <SearchButton
+        v-else
+        class="ml-2 text-slate-600 hover:bg-black/10"
         @click="isAdding = !isAdding"
       />
     </div>
@@ -43,7 +49,8 @@ import {
   DialogTitle
 } from '@headlessui/vue'
 
-import AddButton from '~/components/elements/AddButton.vue';
+import EditButton from '~/components/elements/EditButton.vue';
+import SearchButton from '~/components/elements/SearchButton.vue';
 
 import ResourceSearchInput from './ResourceSearchInput.vue'
 import ResourceOptions from './ResourceOptions.vue'

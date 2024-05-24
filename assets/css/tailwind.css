@@ -4,7 +4,7 @@
 
 @layer components {
   .input {
-    @apply border border-gray-300 bg-transparent rounded text-slate-100 focus:border-transparent focus:ring focus:ring-black/10 focus:outline-none p-1 text-center;
+    @apply border border-gray-300 bg-transparent rounded text-gray-100 focus:border-transparent focus:ring focus:ring-black/10 focus:outline-none p-1 text-center;
   }
   .btn {
     @apply transition-all duration-200 font-bold size-10 rounded-full text-center

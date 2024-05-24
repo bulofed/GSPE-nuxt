@@ -28,6 +28,7 @@ useHead({
     <ScheduleModule />
     <TeacherModule />
   </div>
+  <div id="popover" />
 </template>
 
 <style></style>

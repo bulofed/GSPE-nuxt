@@ -37,7 +37,7 @@
               <input
                 type="text"
                 v-model="lesson.name"
-                class="input flex-grow"
+                class="input flex-grow text-gray-500 dark:text-gray-100"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"
                 placeholder="Nom de la leçon"
@@ -46,7 +46,7 @@
                 type="number"
                 min="1"
                 v-model="lesson.hours"
-                class="input flex-grow"
+                class="input flex-grow text-gray-500 dark:text-gray-100"
                 placeholder="Durée"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"

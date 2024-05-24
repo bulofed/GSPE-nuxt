@@ -1,7 +1,7 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-      class="w-full grid grid-cols-3 py-2 bg-slate-500 rounded-md border-b dark:border-slate-600 justify-between items-center px-6 text-slate-100"
+      class="w-full grid grid-cols-[64px_auto_64px] justify-stretch gap-x-4 py-2 bg-slate-500 rounded-md border-b dark:border-slate-600  items-center px-6 text-slate-100"
       :class="teacher.resources.length == 0 && 'cursor-default'"
     >
       <Icon
@@ -17,8 +17,8 @@
           v-model="teacher.firstname"
           class="input border-none flex-1"
           @click.stop
-          @blur="updateTeacher(teacher)"
-          @keyup.enter="updateTeacher(teacher)"
+          @blur="teacherStore.updateTeacher(teacherId, teacher)"
+          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
           placeholder="Nom de l'enseignant"
         />
         <input
@@ -26,11 +26,11 @@
           v-model="teacher.lastname"
           class="input border-none flex-1"
           @click.stop
-          @blur="updateTeacher(teacher)"
-          @keyup.enter="updateTeacher(teacher)"
+          @blur="teacherStore.updateTeacher(teacherId, teacher)"
+          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
           placeholder="Prénom de l'enseignant"
         />
-        <p v-if="teacher.resources.length > 0" class="text-right">{{ totalHours }}h</p>
+        <p v-if="teacher.resources.length > 0" class="w-full text-right">{{ totalHours }}h</p>
       </div>
       <AddButton
         @click.stop="modalStore.showModal(modalId)"
@@ -77,18 +77,6 @@ const props = defineProps({
 
 let teacherId = props.teacher._id ? props.teacher._id.toString() : ''
 let modalId = ("Add Resource " + teacherId)
-
-function updateTeacher(teacher: ITeacher) {
-  if (!teacher._id) return
-
-  let teacherData = {
-    firstname: teacher.firstname,
-    lastname: teacher.lastname,
-    resources: teacher.resources
-  }
-
-  teacherStore.updateTeacher(teacherId, teacherData)
-}
 
 const totalHours = computed(() => {
   return props.teacher.resources.reduce((total, resource) => {

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/attribute-hyphenation -->
 <template>
   <li>
     <Disclosure v-slot="{ open }">
@@ -14,17 +15,22 @@
         />
         <div class="flex gap-1 justify-between items-center col-start-2">
           <input
+            v-model="resourceName"
             type="text"
-            v-model="resource.name"
             class="input border-none"
+            placeholder="Nom de la ressource"
             @click.stop
             @blur="updateResource(resource)"
             @keyup.enter="updateResource(resource)"
-            placeholder="Nom de la ressource"
-          />
-          <p v-if="resource.lessons.length > 0" class="w-full text-slate-100 text-right">{{ totalHours }}h</p>
+          >
+          <p
+            v-if="resource.lessons.length > 0"
+            class="w-full text-slate-100 text-right"
+          >
+            {{ totalHours }}h
+          </p>
         </div>
-        <MenuRessource :resource="resource" :teacherId="teacherId"/>
+        <MenuRessource :resource="resource" :teacherId="teacherId" />
       </DisclosureButton>
       <Transition>
         <DisclosurePanel as="ul">
@@ -35,24 +41,27 @@
           >
             <div class="flex flex-grow justify-around gap-1">
               <input
-                type="text"
                 v-model="lesson.name"
+                type="text"
+                placeholder="Nom de la leçon"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"
-                placeholder="Nom de la leçon"
-              />
+              >
               <input
+                v-model="lesson.hours"
                 type="number"
                 min="1"
-                v-model="lesson.hours"
-                class="input flex-grow text-gray-500 dark:text-gray-100"
                 placeholder="Durée"
+                class="input flex-grow text-gray-500 dark:text-gray-100"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"
-              />
+              >
             </div>
-            <DeleteButton @click="deleteLesson(lesson)" class="hover:bg-black/10"/>
+            <DeleteButton
+              class="hover:bg-black/10"
+              @click="deleteLesson(lesson)"
+            />
           </li>
         </DisclosurePanel>
       </Transition>
@@ -63,44 +72,45 @@
 <script lang="ts" setup>
 import type { ITeacher, IResource, ILesson } from '~/types'
 
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel
-} from '@headlessui/vue'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
 import DeleteButton from '~/components/elements/DeleteButton.vue'
 
-import MenuRessource from './MenuRessource.vue';
+import MenuRessource from './MenuRessource.vue'
 
 const teacherStore = useTeacherStore()
 
 const props = defineProps({
-resource: {
-  type: Object as () => IResource,
-  default: () => ({})
-},
-teacherId: {
-  type: String,
-  default: ''
-}
+  resource: {
+    type: Object as () => IResource,
+    required: true,
+  },
+  teacherId: {
+    type: String,
+    required: true,
+  },
 })
 
+const resourceName = ref(props.resource.name)
+
 const totalHours = computed(() => {
-  return props.resource.lessons.reduce((total, lesson) => total + lesson.hours, 0);
+  return props.resource.lessons.reduce(
+    (total, lesson) => total + lesson.hours,
+    0
+  )
 })
 
 const updateResource = async (resource: IResource) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
-    resources: teacher.resources.map(existingResource => {
+    resources: teacher.resources.map((existingResource) => {
       if (existingResource._id?.toString() === resource._id?.toString()) {
         return resource
       } else {
         return existingResource
       }
-    })
+    }),
   }
 
   if (newTeacher == teacher) {
@@ -111,53 +121,55 @@ const updateResource = async (resource: IResource) => {
 }
 
 const updateLesson = async (lesson: ILesson) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
-    resources: teacher.resources.map(resource => {
+    resources: teacher.resources.map((resource) => {
       if (resource._id?.toString() === props.resource._id?.toString()) {
         return {
           ...resource,
-          lessons: resource.lessons.map(existingLesson => {
+          lessons: resource.lessons.map((existingLesson) => {
             if (existingLesson._id?.toString() === lesson._id?.toString()) {
               return lesson
             } else {
               return existingLesson
             }
-          })
+          }),
         }
       } else {
         return resource
       }
-    })
+    }),
   }
 
   if (newTeacher == teacher) {
     return
   }
-  
+
   await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 
 const deleteLesson = async (lesson: ILesson) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
-    resources: teacher.resources.map(resource => {
+    resources: teacher.resources.map((resource) => {
       if (resource._id?.toString() === props.resource._id?.toString()) {
         return {
           ...resource,
-          lessons: resource.lessons.filter(existingLesson => existingLesson._id?.toString() !== lesson._id?.toString())
+          lessons: resource.lessons.filter(
+            (existingLesson) =>
+              existingLesson._id?.toString() !== lesson._id?.toString()
+          ),
         }
       } else {
         return resource
       }
-    })
+    }),
   }
 
   await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
-
 </script>
 
 <style scoped>

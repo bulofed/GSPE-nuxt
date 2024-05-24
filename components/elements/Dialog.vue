@@ -1,9 +1,14 @@
 <template>
-<TransitionRoot
-  appear
-  :show="modalStore.show === props.modalName"
-  as="template">
-    <Dialog as="div" @close="modalStore.hideModal(props.modalName)" class="relative z-10">
+  <TransitionRoot
+    appear
+    :show="modalStore.show === props.modalName"
+    as="template"
+  >
+    <Dialog
+      as="div"
+      class="relative z-10"
+      @close="modalStore.hideModal(props.modalName)"
+    >
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -40,7 +45,7 @@
   </TransitionRoot>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import {
   Dialog,
   DialogPanel,
@@ -48,11 +53,12 @@ import {
   TransitionChild,
 } from '@headlessui/vue'
 
-import { useModalStore } from '~/stores/modal'
-
 const modalStore = useModalStore()
 
 const props = defineProps({
-  modalName: String
+  modalName: {
+    type: String,
+    required: true,
+  },
 })
 </script>

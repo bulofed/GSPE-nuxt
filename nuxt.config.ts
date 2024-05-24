@@ -7,14 +7,15 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    "@nuxtjs/tailwindcss",
-    "nuxt-server-utils",
-    "@sidebase/nuxt-auth",
-    "nuxt-icon",
+    '@nuxtjs/tailwindcss',
+    'nuxt-server-utils',
+    '@sidebase/nuxt-auth',
+    'nuxt-icon',
     '@pinia/nuxt',
     'nuxt-headlessui',
     '@nuxtjs/color-mode',
-    "@nuxtjs/google-fonts"
+    '@nuxtjs/google-fonts',
+    '@nuxt/eslint',
   ],
 
   tailwindcss: {
@@ -36,13 +37,13 @@ export default defineNuxtConfig({
   auth: {
     baseURL: process.env.AUTH_ORIGIN,
     provider: {
-      type: 'authjs'
-    }
+      type: 'authjs',
+    },
   },
 
   googleFonts: {
     families: {
       Lato: true,
-    }
-  }
-});
+    },
+  },
+})

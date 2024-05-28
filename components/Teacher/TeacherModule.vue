@@ -32,10 +32,10 @@ import Dialog from '~/components/elements/Dialog.vue'
 const modalStore = useModalStore()
 const teacherStore = useTeacherStore()
 
-const modal = 'addTeacher'
+const modal = ref('addTeacher')
 
 const openForm = (id: string = '') => {
   modalStore.setTeacherId(id)
-  modalStore.showModal(modal)
+  modalStore.showModal(modal.value)
 }
 </script>

@@ -19,8 +19,8 @@
           placeholder="Nom de l'enseignant"
           class="input border-none flex-1"
           @click.stop
-          @blur="teacherStore.updateTeacher(teacherId, teacher)"
-          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
+          @blur="updateTeacher"
+          @keyup.enter="updateTeacher"
         >
         <input
           v-model="teacher.lastname"
@@ -28,8 +28,8 @@
           placeholder="Prénom de l'enseignant"
           class="input border-none flex-1"
           @click.stop
-          @blur="teacherStore.updateTeacher(teacherId, teacher)"
-          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
+          @blur="updateTeacher"
+          @keyup.enter="updateTeacher"
         >
         <p v-if="teacher.resources.length > 0" class="w-full text-right">
           {{ totalHours }}h
@@ -86,4 +86,8 @@ const totalHours = computed(() => {
     )
   }, 0)
 })
+
+const updateTeacher = async() => {
+  await teacherStore.updateTeacher(teacherId, teacher)
+}
 </script>

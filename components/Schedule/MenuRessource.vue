@@ -53,13 +53,14 @@ import type { IResource } from '~/types'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 
 const menu = ref<InstanceType<typeof Menu> | null>(null)
-let menuTop = 0
-let menuLeft = 0
+const menuTop = ref(0)
+const menuLeft = ref(0)
 
 const calculateMenuPos = () => {
   if (!menu.value?.$el) return
-  menuTop = menu.value.$el.offsetTop + menu.value.$el.offsetHeight
-  menuLeft = menu.value.$el.offsetLeft
+  const rect = menu.value.$el.getBoundingClientRect()
+  menuTop.value = rect.top + rect.height
+  menuLeft.value = rect.left
 }
 
 onMounted(async () => {

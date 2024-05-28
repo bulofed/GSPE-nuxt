@@ -20,8 +20,8 @@
             class="input border-none"
             placeholder="Nom de la ressource"
             @click.stop
-            @blur="teacherStore.updateResource(props.teacherId, resource)"
-            @keyup.enter="teacherStore.updateResource(props.teacherId, resource)"
+            @blur="updateResource"
+            @keyup.enter="updateResource"
           >
           <p
             v-if="resource.lessons.length > 0"
@@ -45,8 +45,8 @@
                 type="text"
                 placeholder="Nom de la leçon"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
-                @blur="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
-                @keyup.enter="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
+                @blur="updateLesson(lesson)"
+                @keyup.enter="updateLesson(lesson)"
               >
               <input
                 v-model="lesson.hours"
@@ -54,13 +54,13 @@
                 min="1"
                 placeholder="Durée"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
-                @blur="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
-                @keyup.enter="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
+                @blur="updateLesson(lesson)"
+                @keyup.enter="updateLesson(lesson)"
               >
             </div>
             <DeleteButton
               class="hover:bg-black/10"
-              @click="teacherStore.deleteLesson(props.teacherId, props.resource, lesson)"
+              @click="deleteLesson(lesson)"
             />
           </li>
         </DisclosurePanel>
@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { IResource } from '~/types'
+import type { IResource, ILesson } from '~/types'
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
@@ -105,6 +105,18 @@ const totalHours = computed(() => {
     0
   )
 })
+
+const updateResource = async() => {
+  await teacherStore.updateResource(props.teacherId, props.resource)
+}
+
+const updateLesson = async(lesson: ILesson) => {
+  await teacherStore.updateLesson(props.teacherId, props.resource, lesson)
+}
+
+const deleteLesson = async(lesson: ILesson) => {
+  await teacherStore.deleteLesson(props.teacherId, props.resource, lesson)
+}
 </script>
 
 <style scoped>

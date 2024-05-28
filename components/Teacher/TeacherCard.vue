@@ -39,14 +39,14 @@ const props = defineProps({
 })
 
 const teacherId = props.teacher._id.toString()
-const modalName = 'Edit Teacher ' + teacherId
+const modalName = ref('Edit Teacher ' + teacherId)
 
 const teacherStore = useTeacherStore()
 const modalStore = useModalStore()
 
 const openForm = () => {
   modalStore.setTeacherId(teacherId)
-  modalStore.showModal(modalName)
+  modalStore.showModal(modalName.value)
 }
 
 const deleteTeacher = () => {

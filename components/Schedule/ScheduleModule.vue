@@ -4,7 +4,7 @@
   >
     <ModuleTitle>Planning</ModuleTitle>
     <input v-model="query" type="text" class="w-full p-2" placeholder="Rechercher une ressource">
-    <div class="max-h-[40rem] overflow-y-auto">
+    <div class="max-h-[38rem] overflow-y-auto">
       <div v-if="res.length > 0">
         <Resource
           v-for="resource in res"

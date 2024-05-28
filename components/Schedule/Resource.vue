@@ -8,9 +8,9 @@
       >
         <Icon
           v-if="resource.lessons.length > 0"
-          name="mdi:chevron-down"
+          name="mdi:chevron-right"
           class="transition-all duration-200"
-          :class="open && 'rotate-180 transform justify-self-start'"
+          :class="open && 'rotate-90 transform justify-self-start'"
           size="24"
         />
         <div class="flex gap-1 justify-between items-center col-start-2">
@@ -20,8 +20,8 @@
             class="input border-none"
             placeholder="Nom de la ressource"
             @click.stop
-            @blur="updateResource(resource)"
-            @keyup.enter="updateResource(resource)"
+            @blur="teacherStore.updateResource(props.teacherId, resource)"
+            @keyup.enter="teacherStore.updateResource(props.teacherId, resource)"
           >
           <p
             v-if="resource.lessons.length > 0"
@@ -30,13 +30,13 @@
             {{ totalHours }}h
           </p>
         </div>
-        <MenuRessource :resource="resource" :teacherId="teacherId" />
+        <MenuRessource v-if="mode == 'normal'" :resource="resource" :teacherId="teacherId" />
       </DisclosureButton>
       <Transition>
-        <DisclosurePanel as="ul">
+        <DisclosurePanel v-if="mode == 'normal'" as="ul">
           <li
             v-for="lesson in resource.lessons"
-            :key="lesson._id ? lesson._id.toString() : ''"
+            :key="lesson._id!.toString()"
             class="flex gap-4 justify-between px-6 py-2"
           >
             <div class="flex flex-grow justify-around gap-1">
@@ -45,8 +45,8 @@
                 type="text"
                 placeholder="Nom de la leçon"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
-                @blur="updateLesson(lesson)"
-                @keyup.enter="updateLesson(lesson)"
+                @blur="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
+                @keyup.enter="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
               >
               <input
                 v-model="lesson.hours"
@@ -54,13 +54,13 @@
                 min="1"
                 placeholder="Durée"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
-                @blur="updateLesson(lesson)"
-                @keyup.enter="updateLesson(lesson)"
+                @blur="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
+                @keyup.enter="teacherStore.updateLesson(props.teacherId, props.resource, lesson)"
               >
             </div>
             <DeleteButton
               class="hover:bg-black/10"
-              @click="deleteLesson(lesson)"
+              @click="teacherStore.deleteLesson(props.teacherId, props.resource, lesson)"
             />
           </li>
         </DisclosurePanel>
@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ITeacher, IResource, ILesson } from '~/types'
+import type { IResource } from '~/types'
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
@@ -87,7 +87,13 @@ const props = defineProps({
   },
   teacherId: {
     type: String,
-    required: true,
+    required: false,
+    default: null,
+  },
+  mode: {
+    type: String,
+    required: false,
+    default: 'normal',
   },
 })
 
@@ -99,77 +105,6 @@ const totalHours = computed(() => {
     0
   )
 })
-
-const updateResource = async (resource: IResource) => {
-  const teacher = await teacherStore.fetchTeacher(props.teacherId)
-  const newTeacher: ITeacher = {
-    ...teacher,
-    resources: teacher.resources.map((existingResource) => {
-      if (existingResource._id?.toString() === resource._id?.toString()) {
-        return resource
-      } else {
-        return existingResource
-      }
-    }),
-  }
-
-  if (newTeacher == teacher) {
-    return
-  }
-
-  await teacherStore.updateTeacher(props.teacherId, newTeacher)
-}
-
-const updateLesson = async (lesson: ILesson) => {
-  const teacher = await teacherStore.fetchTeacher(props.teacherId)
-  const newTeacher: ITeacher = {
-    ...teacher,
-    resources: teacher.resources.map((resource) => {
-      if (resource._id?.toString() === props.resource._id?.toString()) {
-        return {
-          ...resource,
-          lessons: resource.lessons.map((existingLesson) => {
-            if (existingLesson._id?.toString() === lesson._id?.toString()) {
-              return lesson
-            } else {
-              return existingLesson
-            }
-          }),
-        }
-      } else {
-        return resource
-      }
-    }),
-  }
-
-  if (newTeacher == teacher) {
-    return
-  }
-
-  await teacherStore.updateTeacher(props.teacherId, newTeacher)
-}
-
-const deleteLesson = async (lesson: ILesson) => {
-  const teacher = await teacherStore.fetchTeacher(props.teacherId)
-  const newTeacher: ITeacher = {
-    ...teacher,
-    resources: teacher.resources.map((resource) => {
-      if (resource._id?.toString() === props.resource._id?.toString()) {
-        return {
-          ...resource,
-          lessons: resource.lessons.filter(
-            (existingLesson) =>
-              existingLesson._id?.toString() !== lesson._id?.toString()
-          ),
-        }
-      } else {
-        return resource
-      }
-    }),
-  }
-
-  await teacherStore.updateTeacher(props.teacherId, newTeacher)
-}
 </script>
 
 <style scoped>

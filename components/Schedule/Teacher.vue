@@ -7,8 +7,8 @@
     >
       <Icon
         v-if="teacher.resources.length > 0"
-        name="mdi:chevron-down"
-        :class="open && 'rotate-180 transform'"
+        name="mdi:chevron-right"
+        :class="open && 'rotate-90 transform'"
         class="transition-all duration-200 justify-self-start h-min"
         size="24"
       />

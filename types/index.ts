@@ -8,6 +8,7 @@ export interface ILesson {
 
 export interface IResource {
   _id?: Types.ObjectId
+  teachers?: ITeacher[]
   name: string
   lessons: ILesson[]
 }

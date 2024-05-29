@@ -8,7 +8,6 @@
         class="absolute mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-gray-900"
         :style="{ top: `${menuTop}px`, left: `${menuLeft}px` }"
       >
-        <div class="absolute left-4 -top-1 rotate-45 size-3 bg-white -10"/>
         <div class="p-1">
           <MenuItem v-slot="{ active }" as="div">
             <button

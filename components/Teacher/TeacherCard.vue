@@ -7,7 +7,7 @@
     <div class="flex flex-col md:flex-row justify-around gap-2">
       <EditButton
         class="bg-blue-500 hover:bg-blue-600 text-slate-100 rounded-md"
-        @click="openForm(modalId)"
+        @click="openForm"
       />
       <Dialog :modalName="modalId">
         <TeacherDialog :modalName="modalId"/>

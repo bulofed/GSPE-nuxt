@@ -108,14 +108,17 @@ const totalHours = computed(() => {
 
 const updateResource = async() => {
   await teacherStore.updateResource(props.teacherId, props.resource)
+  await teacherStore.fetchTeachers()
 }
 
 const updateLesson = async(lesson: ILesson) => {
   await teacherStore.updateLesson(props.teacherId, props.resource, lesson)
+  await teacherStore.fetchTeachers()
 }
 
 const deleteLesson = async(lesson: ILesson) => {
   await teacherStore.deleteLesson(props.teacherId, props.resource, lesson)
+  await teacherStore.fetchTeachers()
 }
 </script>
 

@@ -15,23 +15,7 @@
               :class="
                 active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'
               "
-              @click.stop="addLesson(resource)"
-            >
-              <Icon
-                name="ic:baseline-menu-book"
-                class="mr-2 text-indigo-300 size-5"
-                :active="active"
-              />
-              Ajouter une leçon
-            </button>
-          </MenuItem>
-          <MenuItem v-slot="{ active }" as="div">
-            <button
-              class="menu-item"
-              :class="
-                active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'
-              "
-              @click.stop="deleteResource(resource)"
+              @click.stop="deleteTeacher"
             >
               <Icon
                 name="ic:baseline-delete"
@@ -48,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { IResource } from '~/types'
+import type { ITeacher } from '~/types'
 
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 
@@ -60,7 +44,7 @@ const calculateMenuPos = () => {
   if (!menu.value?.$el) return
   const rect = menu.value.$el.getBoundingClientRect()
   menuTop.value = rect.top + rect.height
-  menuLeft.value = rect.left
+  menuLeft.value = rect.left - 150
 }
 
 onMounted(async () => {
@@ -69,32 +53,19 @@ onMounted(async () => {
 const teacherStore = useTeacherStore()
 
 const props = defineProps({
-  resource: {
-    type: Object as () => IResource,
-    required: true,
-  },
-  teacherId: {
-    type: String,
+  teacher: {
+    type: Object as () => ITeacher,
     required: true,
   },
 })
 
-const deleteResource = async (resource: IResource) => {
+const deleteTeacher = async () => {
   try {
-    await teacherStore.deleteResource(props.teacherId, resource)
+    await teacherStore.deleteTeacher(props.teacher._id!.toString())
+    calculateMenuPos()
     await teacherStore.fetchTeachers()
   } catch (error) {
     console.error('Failed to delete resource:', error)
   }
-}
-
-const addLesson = async (resource: IResource) => {
-  try {
-    await teacherStore.addLesson(props.teacherId, resource)
-    await teacherStore.fetchTeachers()
-  } catch (error) {
-    console.error('Failed to add lesson:', error)
-  }
-  calculateMenuPos()
 }
 </script>

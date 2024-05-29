@@ -96,5 +96,6 @@ const confirm = async () => {
   }
 
   modalStore.hideModal(props.modalName)
+  await teacherStore.fetchTeachers()
 }
 </script>

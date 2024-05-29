@@ -81,5 +81,6 @@ const confirm = async () => {
   }
 
   modalStore.resetTeacherId()
+  await teacherStore.fetchTeachers()
 }
 </script>

@@ -17,44 +17,53 @@ export const useTeacherStore = defineStore({
   }),
   actions: {
     async fetchTeachers() {
-      const response = await $fetch<ITeacherResponse>(
-        '/api/teacher/all-teachers',
-        {
-          method: 'GET',
+      try {
+        const response = await $fetch<ITeacherResponse>(
+          '/api/teacher/all-teachers',
+          {
+            method: 'GET',
+          }
+        )
+        if (response && response.teachers) {
+          this.teachers = response.teachers as ITeacher[]
         }
-      )
-      this.teachers = response.teachers as ITeacher[]
+      } catch (error) {
+        console.error('Failed to fetch teachers:', error)
+      }
       return this.teachers
     },
     async fetchTeacher(id: string) {
-      const response = await $fetch<ISingleTeacherResponse>(
-        `/api/teacher/${id}`,
-        {
-          method: 'GET',
+      try {
+        const response = await $fetch<ISingleTeacherResponse>(
+          `/api/teacher/${id}`,
+          {
+            method: 'GET',
+          }
+        )
+        if (response && response.teacher) {
+          this.teacher = response.teacher as ITeacher
         }
-      )
-      this.teacher = response.teacher as ITeacher
+      } catch (error) {
+        console.error(`Failed to fetch teacher with id ${id}:`, error)
+      }
       return this.teacher
     },
     async deleteTeacher(id: string) {
       await $fetch(`/api/teacher/${id}`, {
         method: 'DELETE',
       })
-      await this.fetchTeachers()
     },
     async createTeacher(teacher: ITeacher) {
       await $fetch('/api/teacher/add', {
         method: 'POST',
         body: JSON.stringify(teacher),
       })
-      await this.fetchTeachers()
     },
     async updateTeacher(id: string, teacher: ITeacher) {
       await $fetch(`/api/teacher/${id}`, {
         method: 'PUT',
         body: JSON.stringify(teacher),
       })
-      await this.fetchTeachers()
     },
     async fetchAllTeachersResources() {
       const teachers = await this.fetchTeachers()

@@ -89,5 +89,6 @@ const totalHours = computed(() => {
 
 const updateTeacher = async() => {
   await teacherStore.updateTeacher(teacherId, teacher)
+  teacherStore.fetchTeachers
 }
 </script>

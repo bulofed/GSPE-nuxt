@@ -37,19 +37,19 @@ async function handleFormSubmit() {
         class="w-full border p-2 rounded-lg mb-4 dark:text-slate-600 placeholder-color"
         type="email"
         placeholder="Email"
-      />
+      >
       <input
         v-model="form.username"
         class="w-full border p-2 rounded-lg mb-4 dark:text-slate-600 placeholder-color"
         type="text"
         placeholder="Nom d'utilisateur"
-      />
+      >
       <input
         v-model="form.password"
         class="w-full border p-2 rounded-lg mb-4 dark:text-slate-600 placeholder-color"
         type="password"
         placeholder="Mot de passe"
-      />
+      >
       <button
       :disabled="isLoading"
         type="submit"

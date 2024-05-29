@@ -1,5 +1,5 @@
 <template>
-  <Menu as="div" class="relative inline-block justify-self-end" ref="menu">
+  <Menu ref="menu" as="div" class="relative inline-block justify-self-end">
     <MenuButton class="btn hover:bg-black/10" @click.stop="calculateMenuTop">
       <Icon name="ic:baseline-more-vert" size="20"/>
     </MenuButton>
@@ -10,7 +10,7 @@
       >
         <div class="absolute left-4 -top-1 rotate-45 size-3 bg-white -10"/>
         <div class="p-1">
-          <MenuItem as="div" v-slot="{ active }">
+          <MenuItem v-slot="{ active }" as="div">
             <button
               class="group flex w-full items-center rounded-md px-2 py-2 text-sm"
               :class="active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'"
@@ -20,7 +20,7 @@
               Ajouter une leçon
             </button>
           </MenuItem>
-          <MenuItem as="div" v-slot="{ active }">
+          <MenuItem v-slot="{ active }" as="div">
             <button
               class="group flex w-full items-center rounded-md px-2 py-2 text-sm"
               :class="active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'"
@@ -75,8 +75,8 @@ teacherId: {
 })
 
 const deleteResource = async (resource: IResource) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
     resources: teacher.resources.filter(existingResource => existingResource._id?.toString() !== resource._id?.toString())
   }
@@ -85,8 +85,8 @@ const deleteResource = async (resource: IResource) => {
 }
 
 const addLesson = async (resource: IResource) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
     resources: teacher.resources.map(existingResource => {
       if (existingResource._id?.toString() === resource._id?.toString()) {

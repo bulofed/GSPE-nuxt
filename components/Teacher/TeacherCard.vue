@@ -6,8 +6,8 @@
     </div>
     <div class="flex flex-col md:flex-row justify-around gap-2">
       <EditButton
-        @click="openForm(modalId)"
         class="bg-blue-500 hover:bg-blue-600 text-slate-100 rounded-md"
+        @click="openForm(modalId)"
       />
       <Dialog :modalName="modalId">
         <TeacherDialog :modalName="modalId"/>
@@ -35,8 +35,8 @@ const props = defineProps({
   }
 })
 
-let teacherId = props.teacher._id.toString()
-let modalId = ("Edit Teacher " + teacherId)
+const teacherId = props.teacher._id.toString()
+const modalId = ("Edit Teacher " + teacherId)
 
 const teacherStore = useTeacherStore()
 const modalStore = useModalStore()

@@ -13,28 +13,28 @@
       />
       <div class="flex items-center col-start-2">
         <input
-          type="text"
           v-model="teacher.firstname"
-          class="input border-none flex-1"
-          @click.stop
-          @blur="teacherStore.updateTeacher(teacherId, teacher)"
-          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
-          placeholder="Nom de l'enseignant"
-        />
-        <input
           type="text"
-          v-model="teacher.lastname"
           class="input border-none flex-1"
+          placeholder="Nom de l'enseignant"
           @click.stop
           @blur="teacherStore.updateTeacher(teacherId, teacher)"
           @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
+        >
+        <input
+          v-model="teacher.lastname"
+          type="text"
+          class="input border-none flex-1"
           placeholder="Prénom de l'enseignant"
-        />
+          @click.stop
+          @blur="teacherStore.updateTeacher(teacherId, teacher)"
+          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
+        >
         <p v-if="teacher.resources.length > 0" class="w-full text-right">{{ totalHours }}h</p>
       </div>
       <AddButton
-        @click.stop="modalStore.showModal(modalId)"
         class="justify-self-end hover:bg-black/10"
+        @click.stop="modalStore.showModal(modalId)"
       />
       <Dialog :modalName="modalId">
         <AddResourceModal :modalName="modalId" :teacherId="teacherId"/>
@@ -65,8 +65,8 @@ import AddResourceModal from './AddResourceModal.vue';
 import AddButton from '~/components/elements/AddButton.vue';
 import Dialog from '~/components/elements/Dialog.vue';
 
-let modalStore = useModalStore()
-let teacherStore = useTeacherStore()
+const modalStore = useModalStore()
+const teacherStore = useTeacherStore()
 
 const props = defineProps({
   teacher: {
@@ -75,8 +75,8 @@ const props = defineProps({
   }
 })
 
-let teacherId = props.teacher._id ? props.teacher._id.toString() : ''
-let modalId = ("Add Resource " + teacherId)
+const teacherId = props.teacher._id ? props.teacher._id.toString() : ''
+const modalId = ("Add Resource " + teacherId)
 
 const totalHours = computed(() => {
   return props.teacher.resources.reduce((total, resource) => {

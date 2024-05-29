@@ -21,8 +21,8 @@
             </div>
             <div class="flex justify-center">
               <button
-                @click="confirm"
                 class="bg-red-400 hover:bg-red-500 transition-all duration-200 text-white font-bold py-2 px-10 rounded"
+                @click="confirm"
               >
                 Oui
               </button>
@@ -36,8 +36,7 @@
 
 <script lang="ts" setup>
 
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
-import { TransitionRoot } from '@headlessui/vue'
+import { Popover, PopoverButton, PopoverPanel , TransitionRoot } from '@headlessui/vue'
 
 import DeleteButton from '~/components/elements/DeleteButton.vue'
 

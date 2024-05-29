@@ -35,8 +35,8 @@
       <ComboboxOption
         v-for="resource in filteredResources"
         :key="resource"
-        :value="resource"
         v-slot="{ active, selected }"
+        :value="resource"
       >
         <li
           class="relative cursor-default select-none py-2 pl-10 pr-4"
@@ -68,7 +68,7 @@ import {
   TransitionRoot
 } from '@headlessui/vue'
 
-let teacherStore = useTeacherStore()
+const teacherStore = useTeacherStore()
 
 const props = defineProps({
   teacherId: String
@@ -78,9 +78,9 @@ if (!props.teacherId) {
   throw new Error('Teacher ID is required')
 }
 
-let missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
+const missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
 
-let query = inject('query') as globalThis.Ref<string>
+const query = inject('query') as globalThis.Ref<string>
 
 const filteredResources = computed(() => {
   return query.value === ''

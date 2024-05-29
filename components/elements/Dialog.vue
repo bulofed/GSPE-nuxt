@@ -3,7 +3,7 @@
   appear
   :show="modalStore.show === props.modalName"
   as="template">
-    <Dialog as="div" @close="modalStore.hideModal(props.modalName)" class="relative z-10">
+    <Dialog as="div" class="relative z-10" @close="modalStore.hideModal(props.modalName)">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"

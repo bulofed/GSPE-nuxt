@@ -53,8 +53,8 @@ export const useTeacherStore = defineStore({
     async fetchAllTeachersResources() {
       const teachers = await this.fetchTeachers();
       const resources = new Set<string>();
-      for (let teacher of teachers) {
-          for (let resource of teacher.resources) {
+      for (const teacher of teachers) {
+          for (const resource of teacher.resources) {
               resources.add(resource.name);
           }
       }
@@ -69,8 +69,8 @@ export const useTeacherStore = defineStore({
       return missingResources;
     },
     async addResourceToTeacher(id: string, resource: string) {
-      let teacher = await this.fetchTeacher(id);
-      let teacherInfo = { ...teacher, resources: [...teacher.resources, { name: resource, lessons: [] }] };
+      const teacher = await this.fetchTeacher(id);
+      const teacherInfo = { ...teacher, resources: [...teacher.resources, { name: resource, lessons: [] }] };
       await this.updateTeacher(id, teacherInfo);
     },
   },

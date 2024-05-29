@@ -33,13 +33,13 @@ async function handleLogin() {
         class="w-full border p-2 rounded-lg mb-4 dark:text-slate-600 placeholder-color"
         type="text"
         placeholder="Nom d'utilisateur"
-      />
+      >
       <input
         v-model="form.password"
         class="w-full border p-2 rounded-lg mb-4 dark:text-slate-600 placeholder-color"
         type="password"
         placeholder="Mot de passe"
-      />
+      >
       <button
         type="submit"
         class="bg-blue-500 hover:bg-blue-600 transition-all duration-200 w-full text-blue-50 rounded-lg p-2 mb-2 font-bold"

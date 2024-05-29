@@ -7,18 +7,18 @@
       Ajouter une ressource
     </DialogTitle>
     <div class="mt-5 w-full flex items-start">
-      <Combobox v-model="selectedResource" v-if="!isAdding">
+      <Combobox v-if="!isAdding" v-model="selectedResource">
         <div class="flex flex-col flex-grow">
           <ResourceSearchInput />
           <ResourceOptions :teacherId="props.teacherId"/>
         </div>
       </Combobox>
       <input
-        v-model="query"
         v-else
+        v-model="query"
         class="border border-gray-300 rounded p-2 flex-grow h-10"
         placeholder="Nom de la ressource"
-      />
+      >
       <EditButton
         v-if="!isAdding"
         class="ml-2 text-slate-600 hover:bg-black/10"
@@ -55,20 +55,26 @@ import SearchButton from '~/components/elements/SearchButton.vue';
 import ResourceSearchInput from './ResourceSearchInput.vue'
 import ResourceOptions from './ResourceOptions.vue'
 
-let modalStore = useModalStore()
-let teacherStore = useTeacherStore()
+const modalStore = useModalStore()
+const teacherStore = useTeacherStore()
 
 const props = defineProps({
-  modalName: String,
-  teacherId: String
+  modalName: {
+    type: String,
+    required: true
+  },
+  teacherId: {
+    type: String,
+    required: true
+  }
 })
 
 if (!props.teacherId) {
   throw new Error('Teacher ID is required')
 }
 
-let missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
-let selectedResource = ref(missingResources.length > 0 ? missingResources[0] : '')
+const missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
+const selectedResource = ref(missingResources.length > 0 ? missingResources[0] : '')
 
 const query = ref('')
 provide('query', query)

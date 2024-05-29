@@ -4,8 +4,8 @@
       <ModuleTitle class="col-start-2">Enseignants</ModuleTitle>
       <div class="ml-auto">
         <AddButton
-          @click="openForm()"
           class="hover:bg-black/10"
+          @click="openForm()"
         />
         <Dialog :modalName="modal">
           <TeacherDialog :modalName="modal"/>

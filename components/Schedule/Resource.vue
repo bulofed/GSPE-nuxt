@@ -14,14 +14,14 @@
         />
         <div class="flex gap-1 justify-between items-center col-start-2">
           <input
-            type="text"
             v-model="resource.name"
+            type="text"
             class="input border-none"
+            placeholder="Nom de la ressource"
             @click.stop
             @blur="updateResource(resource)"
             @keyup.enter="updateResource(resource)"
-            placeholder="Nom de la ressource"
-          />
+          >
           <p v-if="resource.lessons.length > 0" class="w-full text-slate-100 text-right">{{ totalHours }}h</p>
         </div>
         <MenuRessource :resource="resource" :teacherId="teacherId"/>
@@ -35,24 +35,24 @@
           >
             <div class="flex flex-grow justify-around gap-1">
               <input
-                type="text"
                 v-model="lesson.name"
+                type="text"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
+                placeholder="Nom de la leçon"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"
-                placeholder="Nom de la leçon"
-              />
+              >
               <input
+                v-model="lesson.hours"
                 type="number"
                 min="1"
-                v-model="lesson.hours"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
                 placeholder="Durée"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"
-              />
+              >
             </div>
-            <DeleteButton @click="deleteLesson(lesson)" class="hover:bg-black/10"/>
+            <DeleteButton class="hover:bg-black/10" @click="deleteLesson(lesson)"/>
           </li>
         </DisclosurePanel>
       </Transition>
@@ -91,8 +91,8 @@ const totalHours = computed(() => {
 })
 
 const updateResource = async (resource: IResource) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
     resources: teacher.resources.map(existingResource => {
       if (existingResource._id?.toString() === resource._id?.toString()) {
@@ -111,8 +111,8 @@ const updateResource = async (resource: IResource) => {
 }
 
 const updateLesson = async (lesson: ILesson) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
     resources: teacher.resources.map(resource => {
       if (resource._id?.toString() === props.resource._id?.toString()) {
@@ -140,8 +140,8 @@ const updateLesson = async (lesson: ILesson) => {
 }
 
 const deleteLesson = async (lesson: ILesson) => {
-  let teacher = await teacherStore.fetchTeacher(props.teacherId)
-  let newTeacher: ITeacher = {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
     ...teacher,
     resources: teacher.resources.map(resource => {
       if (resource._id?.toString() === props.resource._id?.toString()) {

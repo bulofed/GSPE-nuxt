@@ -5,7 +5,7 @@
         <img
           src="~/assets/logo_iut.png"
           alt="Logo IUT"
-        />
+        >
       </div>
     </NuxtLink>
     <div class="flex items-center gap-1">

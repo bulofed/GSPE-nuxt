@@ -7,17 +7,17 @@
                 type="text"
                 placeholder="Prénom"
                 class="border border-gray-300 p-2 rounded"
-            />
+            >
             <input
                 v-model="lastname"
                 type="text"
                 placeholder="Nom"
                 class="border border-gray-300 p-2 rounded"
-            />
+            >
             <button
-                @click="confirm"
                 type="button"
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                @click="confirm"
             >
                 Confirmer
             </button>
@@ -33,9 +33,9 @@ import { useTeacherStore } from '~/stores/teacher';
 const modalStore = useModalStore();
 const teacherStore = useTeacherStore();
 
-let firstname = ref('');
-let lastname = ref('');
-let action = ref('Ajouter')
+const firstname = ref('');
+const lastname = ref('');
+const action = ref('Ajouter')
 
 onMounted(async () => {
     if (modalStore.teacher_id !== '') {

@@ -14,7 +14,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-headlessui',
     '@nuxtjs/color-mode',
-    "@nuxtjs/google-fonts"
+    "@nuxtjs/google-fonts",
+    "@nuxt/eslint"
   ],
 
   tailwindcss: {

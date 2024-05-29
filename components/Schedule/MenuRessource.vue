@@ -46,7 +46,7 @@ import {
   MenuItem
 } from '@headlessui/vue'
 
-const menu = ref<any>(null)
+const menu = ref<InstanceType<typeof Menu> | null>(null)
 let menuTop = 0
 let menuLeft = 0
 

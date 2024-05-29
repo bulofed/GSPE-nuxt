@@ -53,6 +53,9 @@ import { useModalStore } from '~/stores/modal'
 const modalStore = useModalStore()
 
 const props = defineProps({
-  modalName: String
+  modalName: {
+    type: String,
+    required: true
+  }
 })
 </script>

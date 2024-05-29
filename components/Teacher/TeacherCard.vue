@@ -41,7 +41,7 @@ const modalId = ("Edit Teacher " + teacherId)
 const teacherStore = useTeacherStore()
 const modalStore = useModalStore()
 
-const openForm = (id: string = '') => {
+const openForm = () => {
   modalStore.setTeacherId(teacherId)
   modalStore.showModal(modalId)
 }

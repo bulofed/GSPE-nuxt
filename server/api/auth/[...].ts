@@ -12,7 +12,7 @@ export default NuxtAuthHandler({
     },
 
     providers: [
-        // @ts-expect-error
+        // @ts-expect-error - This is a valid provider
         CredentialsProvider.default({
             name: 'credentials',
             credentials: {},
@@ -58,7 +58,7 @@ export default NuxtAuthHandler({
 
     callbacks: {
 
-        async jwt({token, user, account}) {
+        async jwt({token, user}) {
 
             if (user) {
 

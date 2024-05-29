@@ -8,7 +8,8 @@ export default defineEventHandler(async (event) => {
         await Teacher.findByIdAndUpdate(id, body)
         
         return { message: 'Teacher updated' }
-    } catch (error: any) {
+    } catch (error) {
+        if (error instanceof Error)
         throw createError({ message: error.message, status: 500})
     }
 })

@@ -14,7 +14,7 @@
         />
         <div class="flex gap-1 justify-between items-center col-start-2">
           <input
-            v-model="resource.name"
+            v-model="res.name"
             type="text"
             class="input border-none"
             placeholder="Nom de la ressource"
@@ -85,6 +85,8 @@ teacherId: {
   default: ''
 }
 })
+
+const res = reactive(props.resource)
 
 const totalHours = computed(() => {
   return props.resource.lessons.reduce((total, lesson) => total + lesson.hours, 0);

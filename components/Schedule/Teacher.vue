@@ -13,22 +13,22 @@
       />
       <div class="flex items-center col-start-2">
         <input
-          v-model="teacher.firstname"
+          v-model="localTeacher.firstname"
           type="text"
           class="input border-none flex-1"
           placeholder="Nom de l'enseignant"
           @click.stop
-          @blur="teacherStore.updateTeacher(teacherId, teacher)"
-          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
+          @blur="updateTeacher"
+          @keyup.enter="updateTeacher"
         >
         <input
-          v-model="teacher.lastname"
+          v-model="localTeacher.lastname"
           type="text"
           class="input border-none flex-1"
           placeholder="Prénom de l'enseignant"
           @click.stop
-          @blur="teacherStore.updateTeacher(teacherId, teacher)"
-          @keyup.enter="teacherStore.updateTeacher(teacherId, teacher)"
+          @blur="updateTeacher"
+          @keyup.enter="updateTeacher"
         >
         <p v-if="teacher.resources.length > 0" class="w-full text-right">{{ totalHours }}h</p>
       </div>
@@ -74,6 +74,16 @@ const props = defineProps({
     default: () => ({})
   }
 })
+
+const localTeacher = ref({ ...props.teacher })
+
+watch(props.teacher, (newVal) => {
+  localTeacher.value = {...newVal}
+})
+
+const updateTeacher = () => {
+  teacherStore.updateTeacher(teacherId, localTeacher.value)
+}
 
 const teacherId = props.teacher._id ? props.teacher._id.toString() : ''
 const modalId = ("Add Resource " + teacherId)

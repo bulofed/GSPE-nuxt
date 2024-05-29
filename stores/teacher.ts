@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { ITeacher, ILesson } from '~/types';
+import type { ITeacher } from '~/types';
 
 interface ITeacherResponse {
   teachers: ITeacher[];

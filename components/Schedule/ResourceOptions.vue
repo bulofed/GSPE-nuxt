@@ -71,7 +71,10 @@ import {
 const teacherStore = useTeacherStore()
 
 const props = defineProps({
-  teacherId: String
+  teacherId: {
+    type: String,
+    required: true
+  }
 })
 
 if (!props.teacherId) {

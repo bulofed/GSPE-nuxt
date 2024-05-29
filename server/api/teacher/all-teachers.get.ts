@@ -1,6 +1,6 @@
 import { Teacher } from '~/server/models/Teacher'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
     try {
         const teachers = await Teacher.find().sort('lastname')
 

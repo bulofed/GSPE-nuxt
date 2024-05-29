@@ -20,7 +20,7 @@ async function handleFormSubmit() {
     useRouter().push({
       name: 'login',
     })
-  } catch (e:any) {
+  } catch (e) {
     console.error(e)
   } finally {
     isLoading.value = false

@@ -18,7 +18,7 @@ async function handleLogin() {
     useRouter().push({
       name: 'index',
     });
-  } catch (e: any) {
+  } catch (e) {
     console.error(e);
   }
 }

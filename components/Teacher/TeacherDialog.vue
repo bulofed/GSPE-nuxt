@@ -44,7 +44,10 @@ const resources = ref<IResource[]>([]);
 const action = ref('Ajouter')
 
 const props = defineProps({
-  modalName: String
+  modalName: {
+      type: String,
+      required: true
+  }
 })
 
 onMounted(async () => {

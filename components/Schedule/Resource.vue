@@ -18,6 +18,7 @@
             type="text"
             class="input border-none"
             placeholder="Nom de la ressource"
+            :readonly="mode !== 'normal'"
             @click.stop
             @blur="updateResource(resource)"
             @keyup.enter="updateResource(resource)"
@@ -61,6 +62,30 @@
               class="hover:bg-black/10"
               @click="deleteLesson(lesson)"
             />
+          </li>
+        </DisclosurePanel>
+        <DisclosurePanel v-else>
+          <li
+            v-for="(teacher, index) in resource.teachers!"
+            :key="index"
+            class="px-6 py-2"
+          >
+            <div class="flex flex-grow gap-1">
+              <input
+                v-model="teacher.firstname"
+                type="text"
+                placeholder="Prénom de l'enseignant"
+                class="input border-none text-gray-500 dark:text-gray-100"
+                readonly
+              >
+              <input
+                v-model="teacher.lastname"
+                type="text"
+                placeholder="Nom de l'enseignant"
+                class="input border-none text-gray-500 dark:text-gray-100"
+                readonly
+              >
+            </div>
           </li>
         </DisclosurePanel>
       </Transition>

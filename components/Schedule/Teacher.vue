@@ -6,14 +6,14 @@
     >
       <Icon
       v-if="teacher.resources.length > 0"
-        name="mdi:chevron-down"
-        :class="open && 'rotate-180 transform'"
+        name="mdi:chevron-right"
+        :class="open && 'rotate-90 transform'"
         class="transition-all duration-200 justify-self-start h-min"
         size="24"
       />
       <div class="flex items-center col-start-2">
         <input
-          v-model="localTeacher.firstname"
+          v-model="localTeacher.info.firstname"
           type="text"
           class="input border-none flex-1"
           placeholder="Nom de l'enseignant"
@@ -22,7 +22,7 @@
           @keyup.enter="updateTeacher"
         >
         <input
-          v-model="localTeacher.lastname"
+          v-model="localTeacher.info.lastname"
           type="text"
           class="input border-none flex-1"
           placeholder="Prénom de l'enseignant"
@@ -71,11 +71,11 @@ const teacherStore = useTeacherStore()
 const props = defineProps({
   teacher: {
     type: Object as () => ITeacher,
-    default: () => ({})
+    required: true
   }
 })
 
-const localTeacher = ref({ ...props.teacher })
+const localTeacher = ref({ ...props.teacher }) as Ref<ITeacher>
 
 watch(props.teacher, (newVal) => {
   localTeacher.value = {...newVal}

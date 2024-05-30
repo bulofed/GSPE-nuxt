@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ITeacher, IResource, ILesson } from '~/types'
+import type { ITeacher, IResource, ILesson, ITeacherInfo } from '~/types'
 
 interface ITeacherResponse {
   teachers: ITeacher[]
@@ -24,7 +24,7 @@ export const useTeacherStore = defineStore({
             method: 'GET',
           }
         )
-        if (response && response.teachers) {
+        if (response) {
           this.teachers = response.teachers as ITeacher[]
         }
       } catch (error) {
@@ -40,7 +40,7 @@ export const useTeacherStore = defineStore({
             method: 'GET',
           }
         )
-        if (response && response.teacher) {
+        if (response) {
           this.teacher = response.teacher as ITeacher
         }
       } catch (error) {
@@ -208,7 +208,7 @@ export const useTeacherStore = defineStore({
       // {
       //   id: string,
       //   name: string,
-      //   teachers: ITeacher[],
+      //   teachers: ITeacherInfo[],
       //   lessons: ILesson[]
       // }
       const teachers = await this.fetchTeachers()
@@ -218,7 +218,7 @@ export const useTeacherStore = defineStore({
           resources.push({
             _id: resource._id,
             name: resource.name,
-            teachers: [teacher],
+            teachers: [teacher.info] as ITeacherInfo[],
             lessons: resource.lessons,
           })
         }
@@ -234,7 +234,7 @@ export const useTeacherStore = defineStore({
           mergedResources.push(resource)
         }
       }
-      return resources.filter((resource) =>
+      return mergedResources.filter((resource) =>
         resource.name.toLowerCase().includes(query.toLowerCase())
       )
     }

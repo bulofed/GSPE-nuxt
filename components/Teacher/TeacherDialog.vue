@@ -45,27 +45,29 @@ const action = ref('Ajouter')
 
 const props = defineProps({
   modalName: {
-      type: String,
-      required: true
+    type: String,
+    required: true
   }
 })
 
 onMounted(async () => {
   if (modalStore.teacher_id !== '') {
-      await teacherStore.fetchTeacher(modalStore.teacher_id);
-      action.value = 'Modifier';
-      firstname.value = teacherStore.teacher.firstname;
-      lastname.value = teacherStore.teacher.lastname;
-      resources.value = teacherStore.teacher.resources;
+    await teacherStore.fetchTeacher(modalStore.teacher_id);
+    action.value = 'Modifier';
+    firstname.value = teacherStore.teacher.info.firstname;
+    lastname.value = teacherStore.teacher.info.lastname;
+    resources.value = teacherStore.teacher.resources;
   }
 })
 
 const confirm = async () => {
 
   const teacherData = {
+    info: {
       firstname: firstname.value,
-      lastname: lastname.value,
-      resources: resources.value
+      lastname: lastname.value
+    },
+    resources: resources.value
   }
 
   if (modalStore.teacher_id == '') {

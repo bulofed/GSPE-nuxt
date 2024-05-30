@@ -9,4 +9,7 @@
   .btn {
     @apply transition-all duration-200 font-bold size-10 rounded-full text-center
   }
+  .menu-item {
+    @apply flex w-full items-center rounded-md px-2 py-2 text-sm
+  }
 }

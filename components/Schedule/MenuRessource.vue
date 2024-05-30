@@ -11,7 +11,7 @@
         <div class="p-1">
           <MenuItem v-slot="{ active }" as="div">
             <button
-              class="group flex w-full items-center rounded-md px-2 py-2 text-sm"
+              class="menu-item"
               :class="active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'"
               @click.stop="addLesson(resource)"
             >
@@ -21,7 +21,7 @@
           </MenuItem>
           <MenuItem v-slot="{ active }" as="div">
             <button
-              class="group flex w-full items-center rounded-md px-2 py-2 text-sm"
+              class="menu-item"
               :class="active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'"
               @click.stop="deleteResource(resource)"
             >

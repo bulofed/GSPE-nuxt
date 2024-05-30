@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     try {
         const body = await readBody(event);
 
-        if (!body.firstname || !body.lastname) {
+        if (!body.info.firstname || !body.info.lastname) {
             throw createError({
                 statusCode: 400,
                 statusMessage: 'Mauvaise requête',

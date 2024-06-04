@@ -9,6 +9,8 @@ interface ISingleTeacherResponse {
   teacher: ITeacher
 }
 
+type LessonWithTeacher = ILesson & { teacher: ITeacherInfo };
+
 export const useTeacherStore = defineStore({
   id: 'teacher',
   state: () => ({
@@ -204,37 +206,30 @@ export const useTeacherStore = defineStore({
     },
     async search(query: string) {
       // Returns a list of resources that match the query
-      // Each resource should have the following structure:
-      // {
-      //   id: string,
-      //   name: string,
-      //   teachers: ITeacherInfo[],
-      //   lessons: ILesson[]
-      // }
       const teachers = await this.fetchTeachers()
-      const resources: IResource[] = []
-      for (const teacher of teachers) {   // Get all resources from all teachers
+      const resources: { [key: string]: IResource } = {};
+
+      for (const teacher of teachers) {
         for (const resource of teacher.resources) {
-          resources.push({
-            _id: resource._id,
-            name: resource.name,
-            teachers: [teacher.info] as ITeacherInfo[],
-            lessons: resource.lessons,
-          })
+          const lessonsWithTeacher: LessonWithTeacher[] = resource.lessons.map(lesson => ({
+            ...lesson,
+            teacher: teacher.info,
+          }));
+
+          if (!resources[resource.name]) {
+            resources[resource.name] = {
+              _id: resource._id,
+              name: resource.name,
+              teachers: [teacher.info],
+              lessons: lessonsWithTeacher,
+            };
+          } else {
+            resources[resource.name].teachers!.push(teacher.info);
+            resources[resource.name].lessons.push(...lessonsWithTeacher);
+          }
         }
       }
-      const mergedResources: IResource[] = []
-      for (const resource of resources) {   // If the same resource is found in multiple teachers, merge them
-        const existingResource = mergedResources.find(
-          (r) => r.name === resource.name
-        )
-        if (existingResource) {
-          existingResource.teachers!.push(resource.teachers![0])
-        } else {
-          mergedResources.push(resource)
-        }
-      }
-      return mergedResources.filter((resource) =>
+      return Object.values(resources).filter((resource) =>
         resource.name.toLowerCase().includes(query.toLowerCase())
       )
     }

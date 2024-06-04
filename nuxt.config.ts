@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     'nuxt-headlessui',
     '@nuxtjs/color-mode',
     "@nuxtjs/google-fonts",
-    "@nuxt/eslint"
+    "@nuxt/eslint",
   ],
 
   tailwindcss: {

@@ -18,7 +18,6 @@
             type="text"
             class="input border-none"
             placeholder="Nom de la ressource"
-            :readonly="mode !== 'normal'"
             @click.stop
             @blur="updateResource(resource)"
             @keyup.enter="updateResource(resource)"
@@ -85,6 +84,7 @@
                 class="input border-none text-gray-500 dark:text-gray-100"
                 readonly
               >
+              <p class="text-right ml-auto">{{ totalHoursByTeacher(teacher.firstname, teacher.lastname) }}h</p>
             </div>
           </li>
         </DisclosurePanel>
@@ -198,6 +198,16 @@ const deleteLesson = async (lesson: ILesson) => {
 
   await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
+
+interface ILessonWithTeacher extends ILesson {
+  teacher: { firstname: string; lastname: string; };
+}
+
+const totalHoursByTeacher = (teacherFirstname: string, teacherLastname: string) => {
+  return (props.resource.lessons as ILessonWithTeacher[])
+    .filter(lesson => lesson.teacher.firstname === teacherFirstname && lesson.teacher.lastname === teacherLastname)
+    .reduce((total, lesson) => total + lesson.hours, 0);
+};
 
 </script>
 

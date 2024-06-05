@@ -34,7 +34,7 @@
       </ComboboxOption>
       <ComboboxOption
         v-for="resource in filteredResources"
-        :key="resource"
+        :key="resource.name"
         v-slot="{ active, selected }"
         :value="resource"
       >
@@ -46,7 +46,7 @@
             class="block truncate"
             :class="{ 'font-semibold': selected, 'text-teal-600': active }"
           >
-            {{ resource }}
+            {{ resource.libelle }}
           </span>
           <span v-if="selected">
             <Icon
@@ -83,13 +83,12 @@ if (!props.teacherId) {
 
 const missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
 
-const query = inject('query') as globalThis.Ref<string>
+const query = ref('')
+inject('query', query)
 
 const filteredResources = computed(() => {
   return query.value === ''
     ? missingResources
-    : missingResources.filter((resource) => {
-      return resource.toLowerCase().includes(query.value.toLowerCase())
-    })
+    : missingResources.filter(resource => resource.libelle.toLowerCase().includes(query.value.toLowerCase()))
 })
 </script>

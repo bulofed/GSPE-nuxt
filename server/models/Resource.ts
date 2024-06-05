@@ -7,5 +7,10 @@ export const ResourceSchema = new Schema({
         required: true,
         trim: true,
     },
+    libelle: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     lessons: [LessonSchema]
 });

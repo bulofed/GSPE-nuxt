@@ -72,33 +72,35 @@ export const useTeacherStore = defineStore({
     },
     async fetchAllTeachersResources() {
       const teachers = await this.fetchTeachers()
-      const resources = new Set<string>()
+      const resources = new Map<string, IResource>()
       for (const teacher of teachers) {
         for (const resource of teacher.resources) {
-          resources.add(resource.name)
+          resources.set(resource.name, resource)
         }
       }
-      return Array.from(resources)
+      return Array.from(resources.values())
     },
     async fetchMissingResourcesForTeacher(id: string) {
       const allResources = await this.fetchAllTeachersResources()
       const teacher = await this.fetchTeacher(id)
-      const teacherResources = teacher.resources.map(
-        (resource) => resource.name
-      )
+      const teacherResources = teacher.resources
       const missingResources = allResources.filter(
-        (resource) => !teacherResources.includes(resource)
+        (resource) =>
+          !teacherResources.some(
+            (teacherResource) =>
+              teacherResource.name === resource.name
+          )
       )
 
       return missingResources
     },
-    async addResourceToTeacher(id: string, resource: string) {
+    async addResourceToTeacher(id: string, resource: IResource) {
       const teacher = await this.fetchTeacher(id)
-      const teacherInfo = {
+      const newTeacher: ITeacher = {
         ...teacher,
-        resources: [...teacher.resources, { name: resource, lessons: [] }],
+        resources: [...teacher.resources, resource],
       }
-      await this.updateTeacher(id, teacherInfo)
+      await this.updateTeacher(id, newTeacher)
     },
     async deleteResource(teacherId: string, resource: IResource) {
       const teacher = await this.fetchTeacher(teacherId)
@@ -220,6 +222,7 @@ export const useTeacherStore = defineStore({
             resources[resource.name] = {
               _id: resource._id,
               name: resource.name,
+              libelle: resource.libelle,
               teachers: [teacher.info],
               lessons: lessonsWithTeacher,
             };

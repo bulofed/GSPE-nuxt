@@ -10,6 +10,7 @@ export interface IResource {
   _id?: Types.ObjectId
   teachers?: ITeacherInfo[]
   name: string
+  libelle: string
   lessons: ILesson[]
 }
 

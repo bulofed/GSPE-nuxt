@@ -7,18 +7,24 @@
       Ajouter une ressource
     </DialogTitle>
     <div class="mt-5 w-full flex items-start">
-      <Combobox v-if="!isAdding" v-model="selectedResource">
+      <Combobox v-if="!isAdding" v-model="selectedResource.libelle">
         <div class="flex flex-col flex-grow">
-          <ResourceSearchInput />
+          <ResourceSearchInput :query="ressource.libelle"/>
           <ResourceOptions :teacherId="props.teacherId"/>
         </div>
       </Combobox>
-      <input
-        v-else
-        v-model="query"
-        class="border border-gray-300 rounded p-2 flex-grow h-10"
-        placeholder="Nom de la ressource"
-      >
+      <div v-else class="flex-1 space-y-2">
+        <input
+          v-model="nomRessource"
+          class="border border-gray-300 rounded p-2 h-10 w-full"
+          placeholder="Nom de la ressource"
+        >
+        <input
+          v-model="libelleResource"
+          class="border border-gray-300 rounded p-2 h-10 w-full"
+          placeholder="Libelle de la ressource"
+        >
+      </div>
       <EditButton
         v-if="!isAdding"
         class="ml-2 text-slate-600 hover:bg-black/10"
@@ -55,6 +61,8 @@ import SearchButton from '~/components/elements/SearchButton.vue';
 import ResourceSearchInput from './ResourceSearchInput.vue'
 import ResourceOptions from './ResourceOptions.vue'
 
+import type { IResource } from '~/types';
+
 const modalStore = useModalStore()
 const teacherStore = useTeacherStore()
 
@@ -73,11 +81,22 @@ if (!props.teacherId) {
   throw new Error('Teacher ID is required')
 }
 
-const missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
-const selectedResource = ref(missingResources.length > 0 ? missingResources[0] : '')
+const selectedResource = ref<IResource>({
+  name: '',
+  libelle: '',
+  lessons: []
+})
 
-const query = ref('')
-provide('query', query)
+const nomRessource = ref('')
+const libelleResource = ref('')
+
+const ressource = computed(() => ({
+  name: nomRessource.value,
+  libelle: libelleResource.value,
+  lessons: []
+}))
+
+provide('query', ressource.value.name)
 
 const isAdding = ref(false)
 
@@ -86,11 +105,9 @@ const confirm = async () => {
     return
   }
 
-  if (query.value) {
-    await teacherStore.addResourceToTeacher(props.teacherId, query.value)
-  }
-
-  if (selectedResource.value) {
+  if (ressource.value.name.length > 0 && ressource.value.libelle.length > 0) {
+    await teacherStore.addResourceToTeacher(props.teacherId, ressource.value)
+  } else if (selectedResource.value) {
     await teacherStore.addResourceToTeacher(props.teacherId, selectedResource.value)
   }
 

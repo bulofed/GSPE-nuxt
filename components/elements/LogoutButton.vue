@@ -9,10 +9,9 @@
 </template>
 
 <script lang="ts" setup>
-
-const { signOut } = useAuth();
+const { signOut } = useAuth()
 
 async function handleLogout() {
-  await signOut();
+  await signOut()
 }
 </script>

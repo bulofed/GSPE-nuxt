@@ -1,21 +1,19 @@
 <script lang="ts" setup>
-
 const form = ref({
-  email: "",
-  username: "",
-  password: "",
-});
+  email: '',
+  username: '',
+  password: '',
+})
 
-const isLoading = ref(false);
+const isLoading = ref(false)
 
 async function handleFormSubmit() {
-  
   try {
     isLoading.value = true
     await useFetch('/api/auth/register', {
       method: 'POST',
-      body: form.value
-    });
+      body: form.value,
+    })
 
     useRouter().push({
       name: 'login',
@@ -26,7 +24,6 @@ async function handleFormSubmit() {
     isLoading.value = false
   }
 }
-
 </script>
 <template>
   <div>
@@ -51,19 +48,20 @@ async function handleFormSubmit() {
         placeholder="Mot de passe"
       >
       <button
-      :disabled="isLoading"
+        :disabled="isLoading"
         type="submit"
         class="bg-blue-500 hover:bg-blue-600 transition-all duration-200 w-full text-blue-50 rounded-lg p-2 mb-2 font-bold"
         :class="{
-          'opacity-50 cursor-not-allowed': isLoading
-        
+          'opacity-50 cursor-not-allowed': isLoading,
         }"
       >
         S'inscrire
       </button>
     </form>
     <span class="mr-2">Déjà un compte ?</span>
-    <nuxt-link to="/login" class="text-blue-500 hover:underline font-medium">Se connecter</nuxt-link>
+    <nuxt-link to="/login" class="text-blue-500 hover:underline font-medium"
+      >Se connecter</nuxt-link
+    >
   </div>
 </template>
 

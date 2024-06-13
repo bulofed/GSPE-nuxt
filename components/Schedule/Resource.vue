@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/attribute-hyphenation -->
 <template>
   <li>
     <Disclosure v-slot="{ open }">
@@ -14,15 +13,26 @@
           size="24"
         />
         <div class="flex gap-1 justify-between items-center col-start-2">
-          <input
-            v-model="resourceName"
-            type="text"
-            class="input border-none"
-            placeholder="Nom de la ressource"
-            @click.stop
-            @blur="updateResource"
-            @keyup.enter="updateResource"
-          >
+          <div class="flex gap-1">
+            <input
+              v-model="res.name"
+              type="text"
+              class="input border-none"
+              placeholder="Nom de la ressource"
+              @click.stop
+              @blur="updateResource(resource)"
+              @keyup.enter="updateResource(resource)"
+            >
+            <input
+              v-model="res.libelle"
+              type="text"
+              class="input border-none"
+              placeholder="Libelle de la ressource"
+              @click.stop
+              @blur="updateResource(resource)"
+              @keyup.enter="updateResource(resource)"
+            >
+          </div>
           <p
             v-if="resource.lessons.length > 0"
             class="w-full text-slate-100 text-right"
@@ -64,62 +74,152 @@
             />
           </li>
         </DisclosurePanel>
+        <DisclosurePanel v-else>
+          <li
+            v-for="(teacher, index) in resource.teachers!"
+            :key="index"
+            class="px-6 py-2"
+          >
+            <div class="flex flex-grow gap-1">
+              <input
+                v-model="teacher.firstname"
+                type="text"
+                placeholder="Prénom de l'enseignant"
+                class="input border-none text-gray-500 dark:text-gray-100"
+                readonly
+              >
+              <input
+                v-model="teacher.lastname"
+                type="text"
+                placeholder="Nom de l'enseignant"
+                class="input border-none text-gray-500 dark:text-gray-100"
+                readonly
+              >
+              <p class="text-right ml-auto">{{ totalHoursByTeacher(teacher.firstname, teacher.lastname) }}h</p>
+            </div>
+          </li>
+        </DisclosurePanel>
       </Transition>
     </Disclosure>
   </li>
 </template>
 
 <script lang="ts" setup>
-import type { IResource, ILesson } from '~/types'
+import type { ITeacher, IResource, ILesson } from '~/types'
 
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel
+} from '@headlessui/vue'
 
 import DeleteButton from '~/components/elements/DeleteButton.vue'
 
-import MenuRessource from './MenuRessource.vue'
+import MenuRessource from './MenuRessource.vue';
 
 const teacherStore = useTeacherStore()
 
 const props = defineProps({
-  resource: {
-    type: Object as () => IResource,
-    required: true,
-  },
-  teacherId: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  mode: {
-    type: String,
-    required: false,
-    default: 'normal',
-  },
+resource: {
+  type: Object as () => IResource,
+  required: true
+},
+teacherId: {
+  type: String,
+  required: false,
+  default: ''
+},
+mode: {
+  type: String,
+  required: false,
+  default: 'normal'
+}
 })
 
-const resourceName = ref(props.resource.name)
+const res = reactive(props.resource)
 
 const totalHours = computed(() => {
-  return props.resource.lessons.reduce(
-    (total, lesson) => total + lesson.hours,
-    0
-  )
+  return props.resource.lessons.reduce((total, lesson) => total + lesson.hours, 0);
 })
 
-const updateResource = async() => {
-  await teacherStore.updateResource(props.teacherId, props.resource)
-  await teacherStore.fetchTeachers()
+const updateResource = async (resource: IResource) => {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.map(existingResource => {
+      if (existingResource._id?.toString() === resource._id?.toString()) {
+        return resource
+      } else {
+        return existingResource
+      }
+    })
+  }
+
+  if (newTeacher == teacher) {
+    return
+  }
+
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 
-const updateLesson = async(lesson: ILesson) => {
-  await teacherStore.updateLesson(props.teacherId, props.resource, lesson)
-  await teacherStore.fetchTeachers()
+const updateLesson = async (lesson: ILesson) => {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.map(resource => {
+      if (resource._id?.toString() === props.resource._id?.toString()) {
+        return {
+          ...resource,
+          lessons: resource.lessons.map(existingLesson => {
+            if (existingLesson._id?.toString() === lesson._id?.toString()) {
+              return lesson
+            } else {
+              return existingLesson
+            }
+          })
+        }
+      } else {
+        return resource
+      }
+    })
+  }
+
+  if (newTeacher == teacher) {
+    return
+  }
+  
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 
-const deleteLesson = async(lesson: ILesson) => {
-  await teacherStore.deleteLesson(props.teacherId, props.resource, lesson)
-  await teacherStore.fetchTeachers()
+const deleteLesson = async (lesson: ILesson) => {
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.map(resource => {
+      if (resource._id?.toString() === props.resource._id?.toString()) {
+        return {
+          ...resource,
+          lessons: resource.lessons.filter(existingLesson => existingLesson._id?.toString() !== lesson._id?.toString())
+        }
+      } else {
+        return resource
+      }
+    })
+  }
+
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
+
+interface ILessonWithTeacher extends ILesson {
+  teacher: { firstname: string; lastname: string; };
+}
+
+const totalHoursByTeacher = (teacherFirstname: string, teacherLastname: string) => {
+  return (props.resource.lessons as ILessonWithTeacher[])
+    .filter(lesson => lesson.teacher.firstname === teacherFirstname && lesson.teacher.lastname === teacherLastname)
+    .reduce((total, lesson) => total + lesson.hours, 0);
+};
+
 </script>
 
 <style scoped>
@@ -135,5 +235,16 @@ const deleteLesson = async(lesson: ILesson) => {
 
 ::placeholder {
   color: var(--slate-400);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: none;
 }
 </style>

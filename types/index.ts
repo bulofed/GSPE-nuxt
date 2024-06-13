@@ -8,15 +8,20 @@ export interface ILesson {
 
 export interface IResource {
   _id?: Types.ObjectId
-  teachers?: ITeacher[]
+  teachers?: ITeacherInfo[]
   name: string
+  libelle: string
   lessons: ILesson[]
+}
+
+export interface ITeacherInfo {
+  firstname: string
+  lastname: string
 }
 
 export interface ITeacher {
   _id?: Types.ObjectId
-  firstname: string
-  lastname: string
+  info: ITeacherInfo
   resources: IResource[]
   createdAt?: Date
   updatedAt?: Date

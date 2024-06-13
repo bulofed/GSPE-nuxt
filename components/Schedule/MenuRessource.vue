@@ -1,7 +1,7 @@
 <template>
   <Menu ref="menu" as="div" class="relative inline-block justify-self-end">
-    <MenuButton class="btn hover:bg-black/10" @click.stop="calculateMenuPos">
-      <Icon name="ic:baseline-more-vert" size="20" />
+    <MenuButton class="btn hover:bg-black/10" @click.stop="calculateMenuTop">
+      <Icon name="ic:baseline-more-vert" size="20"/>
     </MenuButton>
     <Teleport to="#popover">
       <MenuItems
@@ -12,32 +12,20 @@
           <MenuItem v-slot="{ active }" as="div">
             <button
               class="menu-item"
-              :class="
-                active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'
-              "
+              :class="active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'"
               @click.stop="addLesson(resource)"
             >
-              <Icon
-                name="ic:baseline-menu-book"
-                class="mr-2 text-indigo-300 size-5"
-                :active="active"
-              />
+              <Icon name="ic:baseline-menu-book" class="mr-2 text-indigo-300 size-5" :active="active"/>
               Ajouter une leçon
             </button>
           </MenuItem>
           <MenuItem v-slot="{ active }" as="div">
             <button
               class="menu-item"
-              :class="
-                active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'
-              "
+              :class="active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'"
               @click.stop="deleteResource(resource)"
             >
-              <Icon
-                name="ic:baseline-delete"
-                class="mr-2 text-indigo-300 size-5"
-                :active="active"
-              />
+              <Icon name="ic:baseline-delete" class="mr-2 text-indigo-300 size-5" :active="active"/>
               Supprimer
             </button>
           </MenuItem>
@@ -48,53 +36,77 @@
 </template>
 
 <script lang="ts" setup>
-import type { IResource } from '~/types'
+import type { ITeacher, IResource } from '~/types'
 
-import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+import {
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem
+} from '@headlessui/vue'
 
 const menu = ref<InstanceType<typeof Menu> | null>(null)
 const menuTop = ref(0)
 const menuLeft = ref(0)
 
-const calculateMenuPos = () => {
+onMounted(async () => {
   if (!menu.value?.$el) return
   const rect = menu.value.$el.getBoundingClientRect()
   menuTop.value = rect.top + rect.height
   menuLeft.value = rect.left
+})
+
+const calculateMenuTop = () => {
+  if (!menu.value?.$el) return
+  const rect = menu.value.$el.getBoundingClientRect()
+  menuTop.value = rect.top + rect.height
 }
 
-onMounted(async () => {
-  calculateMenuPos()
-})
 const teacherStore = useTeacherStore()
 
 const props = defineProps({
-  resource: {
-    type: Object as () => IResource,
-    required: true,
-  },
-  teacherId: {
-    type: String,
-    required: true,
-  },
+resource: {
+  type: Object as () => IResource,
+  default: () => ({})
+},
+teacherId: {
+  type: String,
+  default: ''
+}
 })
 
 const deleteResource = async (resource: IResource) => {
-  try {
-    await teacherStore.deleteResource(props.teacherId, resource)
-    await teacherStore.fetchTeachers()
-  } catch (error) {
-    console.error('Failed to delete resource:', error)
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.filter(existingResource => existingResource._id?.toString() !== resource._id?.toString())
   }
+
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 
 const addLesson = async (resource: IResource) => {
-  try {
-    await teacherStore.addLesson(props.teacherId, resource)
-    await teacherStore.fetchTeachers()
-  } catch (error) {
-    console.error('Failed to add lesson:', error)
+  const teacher = await teacherStore.fetchTeacher(props.teacherId)
+  const newTeacher: ITeacher = {
+    ...teacher,
+    resources: teacher.resources.map(existingResource => {
+      if (existingResource._id?.toString() === resource._id?.toString()) {
+        return {
+          ...existingResource,
+          lessons: [
+            ...existingResource.lessons,
+            {
+              name: '',
+              hours: 1
+            }
+          ]
+        }
+      } else {
+        return existingResource
+      }
+    })
   }
-  calculateMenuPos()
+
+  await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 </script>

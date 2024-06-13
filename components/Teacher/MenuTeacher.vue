@@ -15,6 +15,22 @@
               :class="
                 active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'
               "
+              @click.stop="editTeacher"
+            >
+              <Icon
+                name="ic:baseline-edit"
+                class="mr-2 text-indigo-300 size-5"
+                :active="active"
+              />
+              Modifier
+            </button>
+          </MenuItem>
+          <MenuItem v-slot="{ active }" as="div">
+            <button
+              class="menu-item"
+              :class="
+                active ? 'bg-indigo-400 text-white' : 'bg-white text-gray-900'
+              "
               @click.stop="deleteTeacher"
             >
               <Icon
@@ -39,6 +55,8 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 const menu = ref<InstanceType<typeof Menu> | null>(null)
 const menuTop = ref(0)
 const menuLeft = ref(0)
+
+const emit = defineEmits(['edit-teacher'])
 
 const calculateMenuPos = () => {
   if (!menu.value?.$el) return
@@ -67,5 +85,10 @@ const deleteTeacher = async () => {
   } catch (error) {
     console.error('Failed to delete resource:', error)
   }
+}
+
+const editTeacher = () => {
+  emit('edit-teacher')
+  
 }
 </script>

@@ -1,24 +1,25 @@
 <script lang="ts" setup>
+
 definePageMeta({
   middleware: 'guest',
-})
+});
 
 const form = ref({
-  username: '',
-  password: '',
-})
+  username: "",
+  password: "",
+});
 
-const { signIn } = useAuth()
+const { signIn } = useAuth();
 
 async function handleLogin() {
   try {
-    await signIn('credentials', form.value)
+    await signIn('credentials', form.value);
 
     useRouter().push({
       name: 'index',
-    })
+    });
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
 }
 </script>
@@ -47,9 +48,7 @@ async function handleLogin() {
       </button>
     </form>
     <span class="mr-2">Pas de compte ?</span>
-    <nuxt-link to="/register" class="text-blue-500 hover:underline font-medium"
-      >S'inscrire</nuxt-link
-    >
+    <nuxt-link to="/register" class="text-blue-500 hover:underline font-medium">S'inscrire</nuxt-link>
   </div>
 </template>
 

@@ -1,16 +1,16 @@
 import { Schema } from 'mongoose';
-import { LessonSchema } from './Lesson';
+import type { ITeacherInfo } from '~/types';
 
-export const ResourceSchema = new Schema({
-    name: {
+export const TeacherInfoSchema = new Schema<ITeacherInfo>({
+    firstname: {
         type: String,
         required: true,
         trim: true,
     },
-    libelle: {
+
+    lastname: {
         type: String,
         required: true,
         trim: true,
-    },
-    lessons: [LessonSchema]
-});
+    }
+}, { timestamps: true });

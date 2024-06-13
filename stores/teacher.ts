@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ITeacher, IResource, ILesson } from '~/types'
+import type { ITeacher, IResource, ILesson, ITeacherInfo } from '~/types'
 
 interface ITeacherResponse {
   teachers: ITeacher[]
@@ -8,6 +8,8 @@ interface ITeacherResponse {
 interface ISingleTeacherResponse {
   teacher: ITeacher
 }
+
+type LessonWithTeacher = ILesson & { teacher: ITeacherInfo };
 
 export const useTeacherStore = defineStore({
   id: 'teacher',
@@ -24,7 +26,7 @@ export const useTeacherStore = defineStore({
             method: 'GET',
           }
         )
-        if (response && response.teachers) {
+        if (response) {
           this.teachers = response.teachers as ITeacher[]
         }
       } catch (error) {
@@ -40,7 +42,7 @@ export const useTeacherStore = defineStore({
             method: 'GET',
           }
         )
-        if (response && response.teacher) {
+        if (response) {
           this.teacher = response.teacher as ITeacher
         }
       } catch (error) {
@@ -52,48 +54,53 @@ export const useTeacherStore = defineStore({
       await $fetch(`/api/teacher/${id}`, {
         method: 'DELETE',
       })
+      await this.fetchTeachers()
     },
     async createTeacher(teacher: ITeacher) {
       await $fetch('/api/teacher/add', {
         method: 'POST',
         body: JSON.stringify(teacher),
       })
+      await this.fetchTeachers()
     },
     async updateTeacher(id: string, teacher: ITeacher) {
       await $fetch(`/api/teacher/${id}`, {
         method: 'PUT',
         body: JSON.stringify(teacher),
       })
+      await this.fetchTeachers()
     },
     async fetchAllTeachersResources() {
       const teachers = await this.fetchTeachers()
-      const resources = new Set<string>()
+      const resources = new Map<string, IResource>()
       for (const teacher of teachers) {
         for (const resource of teacher.resources) {
-          resources.add(resource.name)
+          resources.set(resource.name, resource)
         }
       }
-      return Array.from(resources)
+      return Array.from(resources.values())
     },
     async fetchMissingResourcesForTeacher(id: string) {
       const allResources = await this.fetchAllTeachersResources()
       const teacher = await this.fetchTeacher(id)
-      const teacherResources = teacher.resources.map(
-        (resource) => resource.name
-      )
+      const teacherResources = teacher.resources
       const missingResources = allResources.filter(
-        (resource) => !teacherResources.includes(resource)
+        (resource) =>
+          !teacherResources.some(
+            (teacherResource) =>
+              teacherResource.name === resource.name
+          )
       )
 
       return missingResources
     },
-    async addResourceToTeacher(id: string, resource: string) {
+    async addResourceToTeacher(id: string, resource: IResource) {
       const teacher = await this.fetchTeacher(id)
-      const teacherInfo = {
+      const newTeacher: ITeacher = {
         ...teacher,
-        resources: [...teacher.resources, { name: resource, lessons: [] }],
+        resources: [...teacher.resources, resource],
       }
-      await this.updateTeacher(id, teacherInfo)
+      await this.updateTeacher(id, newTeacher)
     },
     async deleteResource(teacherId: string, resource: IResource) {
       const teacher = await this.fetchTeacher(teacherId)
@@ -201,37 +208,31 @@ export const useTeacherStore = defineStore({
     },
     async search(query: string) {
       // Returns a list of resources that match the query
-      // Each resource should have the following structure:
-      // {
-      //   id: string,
-      //   name: string,
-      //   teachers: ITeacher[],
-      //   lessons: ILesson[]
-      // }
       const teachers = await this.fetchTeachers()
-      const resources: IResource[] = []
-      for (const teacher of teachers) {   // Get all resources from all teachers
+      const resources: { [key: string]: IResource } = {};
+
+      for (const teacher of teachers) {
         for (const resource of teacher.resources) {
-          resources.push({
-            _id: resource._id,
-            name: resource.name,
-            teachers: [teacher],
-            lessons: resource.lessons,
-          })
+          const lessonsWithTeacher: LessonWithTeacher[] = resource.lessons.map(lesson => ({
+            ...lesson,
+            teacher: teacher.info,
+          }));
+
+          if (!resources[resource.name]) {
+            resources[resource.name] = {
+              _id: resource._id,
+              name: resource.name,
+              libelle: resource.libelle,
+              teachers: [teacher.info],
+              lessons: lessonsWithTeacher,
+            };
+          } else {
+            resources[resource.name].teachers!.push(teacher.info);
+            resources[resource.name].lessons.push(...lessonsWithTeacher);
+          }
         }
       }
-      const mergedResources: IResource[] = []
-      for (const resource of resources) {   // If the same resource is found in multiple teachers, merge them
-        const existingResource = mergedResources.find(
-          (r) => r.name === resource.name
-        )
-        if (existingResource) {
-          existingResource.teachers!.push(resource.teachers![0])
-        } else {
-          mergedResources.push(resource)
-        }
-      }
-      return resources.filter((resource) =>
+      return Object.values(resources).filter((resource) =>
         resource.name.toLowerCase().includes(query.toLowerCase())
       )
     }

@@ -9,8 +9,8 @@
     <div class="mt-5 w-full flex items-start">
       <Combobox v-if="!isAdding" v-model="ressource">
         <div class="flex flex-col flex-grow">
-          <ResourceSearchInput :query="selectedResource.libelle" />
-          <ResourceOptions :teacherId="props.teacherId" @update:query="updateQuery" />
+          <ResourceSearchInput :query="selectedResource" />
+          <ResourceOptions :teacherId="props.teacherId" @query="updateQuery" />
         </div>
       </Combobox>
       <div v-else class="flex-1 space-y-2">
@@ -114,7 +114,7 @@ const confirm = async () => {
   modalStore.hideModal(props.modalName)
 }
 
-const updateQuery = (libelle: string) => {
-  selectedResource.value.libelle = libelle;
+const updateQuery = (ressource: IResource) => {
+  selectedResource.value = ressource
 };
 </script>

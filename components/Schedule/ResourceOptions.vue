@@ -36,8 +36,7 @@
         v-for="resource in filteredResources"
         :key="resource.name"
         v-slot="{ active, selected }"
-        :value="resource"
-        @select="emit('update:query', resource.libelle)"
+        @click="selectResource(resource)"
       >
         <li
           class="relative cursor-default select-none py-2 pl-10 pr-4"
@@ -69,6 +68,8 @@ import {
   TransitionRoot
 } from '@headlessui/vue'
 
+import type { IResource } from '~/types'
+
 const teacherStore = useTeacherStore()
 
 const props = defineProps({
@@ -78,7 +79,11 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:query'])
+const emit = defineEmits(['query'])
+
+const selectResource = (resource: IResource) => {
+  emit('query', resource)
+}
 
 if (!props.teacherId) {
   throw new Error('Teacher ID is required')
@@ -87,7 +92,6 @@ if (!props.teacherId) {
 const missingResources = await teacherStore.fetchMissingResourcesForTeacher(props.teacherId)
 
 const query = ref('')
-inject('query', query)
 
 const filteredResources = computed(() => {
   return query.value === ''

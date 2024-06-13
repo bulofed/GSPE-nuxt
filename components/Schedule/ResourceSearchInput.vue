@@ -1,10 +1,9 @@
 <template>
   <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left sm:text-sm">
     <ComboboxInput
-    v-model="reac"
+    v-model="reac.libelle"
     class="w-full h-10 py-3 pl-3 pr-10 text-sm leading-5 text-gray-900 bg-slate-100"
     placeholder="Rechercher une ressource"
-    @change="reac = $event.target.value"
     
     />
     <ComboboxButton
@@ -17,9 +16,10 @@
 
 <script lang='ts' setup>
 import { ComboboxInput, ComboboxButton } from '@headlessui/vue'
+import type { IResource } from '~/types';
 const props = defineProps({
   query: {
-    type: String,
+    type: Object as () => IResource,
     required: true
   }
 })

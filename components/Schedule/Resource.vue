@@ -13,15 +13,26 @@
           size="24"
         />
         <div class="flex gap-1 justify-between items-center col-start-2">
-          <input
-            v-model="res.name"
-            type="text"
-            class="input border-none"
-            placeholder="Nom de la ressource"
-            @click.stop
-            @blur="updateResource(resource)"
-            @keyup.enter="updateResource(resource)"
-          >
+          <div class="flex gap-1">
+            <input
+              v-model="res.name"
+              type="text"
+              class="input border-none"
+              placeholder="Nom de la ressource"
+              @click.stop
+              @blur="updateResource(resource)"
+              @keyup.enter="updateResource(resource)"
+            >
+            <input
+              v-model="res.libelle"
+              type="text"
+              class="input border-none"
+              placeholder="Libelle de la ressource"
+              @click.stop
+              @blur="updateResource(resource)"
+              @keyup.enter="updateResource(resource)"
+            >
+          </div>
           <p
             v-if="resource.lessons.length > 0"
             class="w-full text-slate-100 text-right"
@@ -224,5 +235,16 @@ const totalHoursByTeacher = (teacherFirstname: string, teacherLastname: string) 
 
 ::placeholder {
   color: var(--slate-400);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: none;
 }
 </style>

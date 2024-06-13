@@ -11,25 +11,25 @@
         class="transition-all duration-200 justify-self-start h-min"
         size="24"
       />
-      <div class="flex items-center col-start-2">
-        <input
-          v-model="localTeacher.info.firstname"
-          type="text"
-          class="input border-none flex-1"
-          placeholder="Nom de l'enseignant"
-          @click.stop
-          @blur="updateTeacher"
-          @keyup.enter="updateTeacher"
-        >
-        <input
-          v-model="localTeacher.info.lastname"
-          type="text"
-          class="input border-none flex-1"
-          placeholder="Prénom de l'enseignant"
-          @click.stop
-          @blur="updateTeacher"
-          @keyup.enter="updateTeacher"
-        >
+      <div class="flex justify-between items-center col-start-2">
+        <div class="flex gap-1 items-center">
+          <input
+            v-model="localTeacher.info.firstname"
+            type="text"
+            class="input border-none flex-1"
+            placeholder="Nom de l'enseignant"
+            readonly
+            @click.stop
+          >
+          <input
+            v-model="localTeacher.info.lastname"
+            type="text"
+            class="input border-none flex-1"
+            placeholder="Prénom de l'enseignant"
+            readonly
+            @click.stop
+          >
+        </div>
         <p v-if="teacher.resources.length > 0" class="w-full text-right">{{ totalHours }}h</p>
       </div>
       <AddButton
@@ -66,7 +66,6 @@ import AddButton from '~/components/elements/AddButton.vue';
 import Dialog from '~/components/elements/Dialog.vue';
 
 const modalStore = useModalStore()
-const teacherStore = useTeacherStore()
 
 const props = defineProps({
   teacher: {
@@ -80,10 +79,6 @@ const localTeacher = ref({ ...props.teacher }) as Ref<ITeacher>
 watch(props.teacher, (newVal) => {
   localTeacher.value = {...newVal}
 })
-
-const updateTeacher = () => {
-  teacherStore.updateTeacher(teacherId, localTeacher.value)
-}
 
 const teacherId = props.teacher._id ? props.teacher._id.toString() : ''
 const modalId = ("Add Resource " + teacherId)

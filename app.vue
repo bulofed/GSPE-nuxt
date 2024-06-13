@@ -4,6 +4,6 @@
   </NuxtLayout>
 </template>
 
-<script>
+<script setup>
 provideHeadlessUseId(() => useId())
 </script>

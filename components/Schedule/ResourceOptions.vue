@@ -37,6 +37,7 @@
         :key="resource.name"
         v-slot="{ active, selected }"
         :value="resource"
+        @select="emit('update:query', resource.libelle)"
       >
         <li
           class="relative cursor-default select-none py-2 pl-10 pr-4"
@@ -76,6 +77,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['update:query'])
 
 if (!props.teacherId) {
   throw new Error('Teacher ID is required')

@@ -28,7 +28,7 @@ Renseignez dans les champs :
 * `AUTH_ORIGIN`: L'adresse du site (e.g. "http://localhost:3000")
 * `AUTH_SECRET`: Un mot de passe quelconque, en local cela n'est pas important.
 
-Enfin lancer le site internet :
+Enfin lancer l'application web :
 
 ```bash
 npm run dev

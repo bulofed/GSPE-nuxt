@@ -9,6 +9,9 @@
       </div>
     </NuxtLink>
     <div class="flex items-center gap-1">
+      <button v-if="(data?.user as any)?.isAdmin" class="p-2 text-slate-500 dark:text-slate-100" @click="handleAdminPanel">
+        <Icon name="ic:baseline-admin-panel-settings" size="24"/>
+      </button>
       <button
         class="p-2 text-slate-500 dark:text-slate-100"
         @click="setColorTheme($colorMode.preference == 'dark' ? 'light' : 'dark')"
@@ -26,6 +29,7 @@
 import LogoutButton from '~/components/elements/LogoutButton.vue'
 
 const { data } = useAuth();
+const router = useRouter();
 const iconName = ref('system');
 
 const setColorTheme = (newTheme: string) => {
@@ -41,4 +45,8 @@ onMounted(() => {
 watch(() => useColorMode().value, (newVal) => {
   iconName.value = newVal;
 })
+
+const handleAdminPanel = () => {
+  router.push('/admin-panel');
+}
 </script>

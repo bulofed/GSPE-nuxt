@@ -33,6 +33,7 @@
         <p v-if="teacher.resources.length > 0" class="w-full text-right">{{ totalHours }}h</p>
       </div>
       <AddButton
+        v-if="isAdmin"
         class="justify-self-end hover:bg-black/10"
         @click.stop="modalStore.showModal(modalId)"
       />
@@ -46,6 +47,7 @@
         :key="resource._id ? resource._id.toString() : ''"
         :resource="resource"
         :teacherId="teacherId"
+        :isAdmin="props.isAdmin"
       />
     </DisclosurePanel>
   </Disclosure>
@@ -71,6 +73,10 @@ const props = defineProps({
   teacher: {
     type: Object as () => ITeacher,
     required: true
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 })
 

@@ -22,7 +22,7 @@
         @keyup.enter="updateTeacher"
       >
     </div>
-    <MenuTeacher :teacher="props.teacher" @edit-teacher="isEditing = true" />
+    <MenuTeacher v-if="props.isAdmin" :teacher="props.teacher" @edit-teacher="isEditing = true" />
   </div>
 </template>
 
@@ -38,6 +38,10 @@ const props = defineProps({
     type: Object as () => ITeacher,
     required: true,
   },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+  }
 })
 
 const res = reactive(props.teacher)

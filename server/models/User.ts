@@ -4,6 +4,7 @@ export interface UserDocument extends Document {
     email: string;
     username: string;
     password: string;
+    isAdmin: boolean;
 };
 
 const UserSchema = new Schema({
@@ -27,6 +28,12 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         length: [8, 'Le mot de passe doit contenir au moins 8 caractères'],
+    },
+
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
 });
 

@@ -47,8 +47,13 @@ async function handleLogin() {
         Se connecter
       </button>
     </form>
-    <span class="mr-2">Pas de compte ?</span>
-    <nuxt-link to="/register" class="text-blue-500 hover:underline font-medium">S'inscrire</nuxt-link>
+    <div class="flex justify-between">
+      <div>
+        <span class="mr-2">Pas de compte ?</span>
+        <nuxt-link to="/register" class="text-blue-500 hover:underline font-medium">S'inscrire</nuxt-link>
+      </div>
+      <nuxt-link to="/forgot-password" class="text-blue-500 hover:underline font-medium">Mot de passe oublié ?</nuxt-link>
+    </div>
   </div>
 </template>
 

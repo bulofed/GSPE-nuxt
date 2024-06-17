@@ -26,6 +26,13 @@ watch(query, async () => {
   res.value = await teacherStore.search(query.value)
 })
 
+const props = defineProps({
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
+})
+
 function calculateTotalHours(teacher: ITeacher): number {
   let totalHours = 0;
 
@@ -62,14 +69,14 @@ const generatePDF = async() => {
   }
 
   page.drawText('Planning', {
-    x: (width - pageMargin * 2) / 2 - 50,
+    x: (width - pageMargin * 2) / 2,
     y: y - fontSizeTitle,
     size: fontSizeTitle,
     font: helveticaFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSizeTitle + lineHeight
+  y -= fontSizeTitle + lineHeight + 30
 
   for (const teacher of teacherStore.teachers) {
     if (y < pageMargin + lineHeight) addNewPage()
@@ -141,6 +148,7 @@ const generatePDF = async() => {
             v-for="teacher in teacherStore.teachers"
             :key="teacher._id!.toString()"
             :teacher="teacher"
+            :isAdmin="props.isAdmin"
           />
         </div>
       </div>

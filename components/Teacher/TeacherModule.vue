@@ -18,6 +18,7 @@
         :key="teacher._id ? teacher._id.toString() : ''"
         :teacher="teacher"
         class="py-2 border-b border-gray-200 dark:border-slate-600"
+        :isAdmin="props.isAdmin"
       />
     </div>
   </div>
@@ -37,6 +38,13 @@ const modalStore = useModalStore()
 const teacherStore = useTeacherStore()
 
 const modal = 'addTeacher'
+
+const props = defineProps({
+  isAdmin: {
+    type: Boolean,
+    required: true,
+  }
+})
 
 const openForm = (id: string = '') => {
   modalStore.setTeacherId(id)

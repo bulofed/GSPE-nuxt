@@ -21,6 +21,7 @@
     "@types/bcrypt": "^5.0.2",
     "nuxt": "^3.7.4",
     "nuxt-headlessui": "^1.2.0",
+    "nuxt-mail": "^5.0.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },

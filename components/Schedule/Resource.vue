@@ -40,7 +40,7 @@
             {{ totalHours }}h
           </p>
         </div>
-        <MenuRessource v-if="mode == 'normal'" :resource="resource" :teacherId="teacherId" />
+        <MenuRessource v-if="mode == 'normal' && props.isAdmin" :resource="resource" :teacherId="teacherId" />
       </DisclosureButton>
       <Transition>
         <DisclosurePanel v-if="mode == 'normal'" as="ul">
@@ -62,13 +62,14 @@
                 v-model="lesson.hours"
                 type="number"
                 min="1"
-                placeholder="Durée"
+                placeholder="Durée (en heure)"
                 class="input flex-grow text-gray-500 dark:text-gray-100"
                 @blur="updateLesson(lesson)"
                 @keyup.enter="updateLesson(lesson)"
               >
             </div>
             <DeleteButton
+              v-if="props.isAdmin"
               class="hover:bg-black/10"
               @click="deleteLesson(lesson)"
             />
@@ -133,6 +134,10 @@ mode: {
   type: String,
   required: false,
   default: 'normal'
+},
+isAdmin: {
+  type: Boolean,
+  default: false
 }
 })
 

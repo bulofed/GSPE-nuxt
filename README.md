@@ -18,6 +18,18 @@ Dans un terminal à la racine du dossier, installez les dépendances :
 npm install
 ```
 
+Un des packages se met à jour automatiquement et casse l'application, il faut donc le downgrade manuellement
+
+```bash
+npm update next-auth@4.21.1
+```
+
+Finalement, il faut règler les problèmes d'incomptabilités avec
+
+```bash
+npm audit --fix
+```
+
 Créez une base de données sur MongoDB, le choix du nom vous est libre.
 
 Dupliquez le fichier `.env.example` et renommez le en `.env`.

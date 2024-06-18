@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ITeacher, IResource, ILesson, ITeacherInfo } from '~/types'
+import type { ITeacher, IResource, ILesson } from '~/types'
 
 interface ITeacherResponse {
   teachers: ITeacher[]
@@ -8,8 +8,6 @@ interface ITeacherResponse {
 interface ISingleTeacherResponse {
   teacher: ITeacher
 }
-
-type LessonWithTeacher = ILesson & { teacher: ITeacherInfo };
 
 export const useTeacherStore = defineStore({
   id: 'teacher',
@@ -213,28 +211,14 @@ export const useTeacherStore = defineStore({
 
       for (const teacher of teachers) {
         for (const resource of teacher.resources) {
-          const lessonsWithTeacher: LessonWithTeacher[] = resource.lessons.map(lesson => ({
-            ...lesson,
-            teacher: teacher.info,
-          }));
-
-          if (!resources[resource.name]) {
-            resources[resource.name] = {
-              _id: resource._id,
-              name: resource.name,
-              libelle: resource.libelle,
-              teachers: [teacher.info],
-              lessons: lessonsWithTeacher,
-            };
-          } else {
-            resources[resource.name].teachers!.push(teacher.info);
-            resources[resource.name].lessons.push(...lessonsWithTeacher);
+          if (resource.name.toLowerCase().includes(query.toLowerCase())) {
+            resources[resource.name] = resource;
+          } else if (resource.libelle.toLowerCase().includes(query.toLowerCase())) {
+            resources[resource.libelle] = resource;
           }
         }
       }
-      return Object.values(resources).filter((resource) =>
-        resource.name.toLowerCase().includes(query.toLowerCase())
-      )
+      return Object.values(resources);
     }
   },
 })

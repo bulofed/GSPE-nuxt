@@ -26,3 +26,13 @@ export interface ITeacher {
   createdAt?: Date
   updatedAt?: Date
 }
+
+export interface IUser {
+  _id?: Types.ObjectId
+  username: string
+  email: string
+  password: string
+  isAdmin: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}

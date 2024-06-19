@@ -2,7 +2,7 @@
   <li>
     <Disclosure v-slot="{ open }">
       <DisclosureButton
-        class="w-full py-2 bg-slate-400 rounded-md border-b dark:border-slate-600 grid grid-cols-[40px_auto_40px] justify-stretch items-center gap-x-4 px-12 cursor-default text-slate-100"
+        class="w-full py-2 bg-slate-200 dark:bg-slate-500 rounded-md border-b border-slate-100 dark:border-slate-600 grid grid-cols-[40px_auto_40px] justify-stretch items-center gap-x-4 px-12 cursor-default text-slate-500 dark:text-slate-100"
         :class="resource.lessons.length > 0 && 'cursor-pointer justify-between'"
       >
         <Icon
@@ -17,7 +17,7 @@
             <input
               v-model="res.name"
               type="text"
-              class="input border-none"
+              class="input border-none text-slate-500 dark:text-slate-100"
               placeholder="Nom de la ressource"
               @click.stop
               @blur="updateResource(resource)"
@@ -26,7 +26,7 @@
             <input
               v-model="res.libelle"
               type="text"
-              class="input border-none"
+              class="input border-none text-slate-500 dark:text-slate-100"
               placeholder="Libelle de la ressource"
               @click.stop
               @blur="updateResource(resource)"
@@ -35,7 +35,7 @@
           </div>
           <p
             v-if="resource.lessons.length > 0"
-            class="w-full text-slate-100 text-right"
+            class="w-full text-slate-500 dark:text-slate-100 text-right"
           >
             {{ totalHours }}h
           </p>

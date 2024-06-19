@@ -1,7 +1,7 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-      class="w-full grid grid-cols-[64px_auto_64px] justify-stretch gap-x-4 py-2 bg-slate-500 rounded-md border-b dark:border-slate-600  items-center px-6 text-slate-100"
+      class="w-full grid grid-cols-[64px_auto_64px] justify-stretch gap-x-4 py-2 bg-slate-200 dark:bg-slate-500 rounded-md border-b border-slate-100 dark:border-slate-600  items-center px-6 text-slate-500 dark:text-slate-100"
       :class="teacher.resources.length == 0 && 'cursor-default'"
     >
       <Icon
@@ -16,7 +16,7 @@
           <input
             v-model="localTeacher.info.firstname"
             type="text"
-            class="input border-none flex-1"
+            class="input border-none flex-1 text-slate-500 dark:text-slate-100"
             placeholder="Nom de l'enseignant"
             readonly
             @click.stop
@@ -24,7 +24,7 @@
           <input
             v-model="localTeacher.info.lastname"
             type="text"
-            class="input border-none flex-1"
+            class="input border-none flex-1 text-slate-500 dark:text-slate-100"
             placeholder="Prénom de l'enseignant"
             readonly
             @click.stop

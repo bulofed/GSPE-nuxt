@@ -14,17 +14,15 @@
 
 import type { IUser } from '~/types';
 
+const userStore = useUserStore();
+
 const users = ref<IUser[]>([]);
 
 onMounted(async () => {
-  const { data } = await useFetch('/api/user');
-  users.value = data.value as IUser[];
+  users.value = await userStore.fetchUsers();
 });
 
 const toggleAdmin = async (user: IUser) => {
-  await fetch(`/api/users/${user._id}/toggle-admin`, {
-    method: 'POST',
-  });
-  user.isAdmin = !user.isAdmin;
+  await userStore.toggleAdmin(user);
 };
 </script>

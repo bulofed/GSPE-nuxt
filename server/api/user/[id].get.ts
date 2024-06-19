@@ -1,10 +1,10 @@
 import { User } from '~/server/models/User'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
     try {
-        const users = await User.find().sort('isAdmin')
-
-        return { users }
+        const user = await User.findById({ _id: event.context.params!.id })
+        setResponseStatus(event, 200, 'User found')
+        return { user }
     } catch (error: unknown) {
         throw createError({
             statusCode: 500,

@@ -2,6 +2,7 @@
   <li>
     <Disclosure v-slot="{ open }">
       <DisclosureButton
+        v-if="resource"
         class="w-full py-2 bg-slate-200 dark:bg-slate-500 rounded-md border-b border-slate-100 dark:border-slate-600 grid grid-cols-[40px_auto_40px] justify-stretch items-center gap-x-4 px-12 cursor-default text-slate-500 dark:text-slate-100"
         :class="resource.lessons.length > 0 && 'cursor-pointer justify-between'"
       >
@@ -15,7 +16,7 @@
         <div class="flex gap-1 justify-between items-center col-start-2">
           <div class="flex gap-1">
             <input
-              v-model="res.name"
+              v-model="res!.name"
               type="text"
               class="input border-none text-slate-500 dark:text-slate-100"
               placeholder="Nom de la ressource"
@@ -24,7 +25,7 @@
               @keyup.enter="updateResource(resource)"
             >
             <input
-              v-model="res.libelle"
+              v-model="res!.libelle"
               type="text"
               class="input border-none text-slate-500 dark:text-slate-100"
               placeholder="Libelle de la ressource"
@@ -40,10 +41,48 @@
             {{ totalHours }}h
           </p>
         </div>
-        <MenuRessource v-if="mode == 'normal' && props.isAdmin" :resource="resource" :teacherId="teacherId" />
+        <MenuRessource v-if="resource && props.isAdmin" :resource="resource" :teacherId="teacherId" />
+      </DisclosureButton>
+      <DisclosureButton
+        v-else
+        class="w-full py-2 bg-slate-200 dark:bg-slate-500 rounded-md border-b border-slate-100 dark:border-slate-600 grid grid-cols-[40px_auto_40px] items-center cursor-pointer justify-between gap-x-4 px-12 text-slate-500 dark:text-slate-100"
+      >
+        <Icon
+          name="mdi:chevron-right"
+          class="transition-all duration-200"
+          :class="open && 'rotate-90 transform justify-self-start'"
+          size="24"
+        />
+        <div class="flex gap-1 justify-between items-center col-start-2">
+          <div class="flex gap-1">
+            <input
+              v-model="resourceInfo!.resource.name"
+              type="text"
+              class="input border-none text-slate-500 dark:text-slate-100"
+              placeholder="Nom de la ressource"
+              @click.stop
+              @blur="updateResource(resource)"
+              @keyup.enter="updateResource(resource)"
+            >
+            <input
+              v-model="resourceInfo!.resource.libelle"
+              type="text"
+              class="input border-none text-slate-500 dark:text-slate-100"
+              placeholder="Libelle de la ressource"
+              @click.stop
+              @blur="updateResource(resource)"
+              @keyup.enter="updateResource(resource)"
+            >
+          </div>
+          <p
+            class="w-full text-slate-500 dark:text-slate-100 text-right"
+          >
+            {{ totalHours }}h
+          </p>
+        </div>
       </DisclosureButton>
       <Transition>
-        <DisclosurePanel v-if="mode == 'normal'" as="ul">
+        <DisclosurePanel v-if="resource" as="ul">
           <li
             v-for="lesson in resource.lessons"
             :key="lesson._id!.toString()"
@@ -75,30 +114,10 @@
             />
           </li>
         </DisclosurePanel>
-        <DisclosurePanel v-else>
-          <li
-            v-for="(teacher, index) in resource.teachers!"
-            :key="index"
-            class="px-6 py-2"
-          >
-            <div class="flex flex-grow gap-1">
-              <input
-                v-model="teacher.firstname"
-                type="text"
-                placeholder="Prénom de l'enseignant"
-                class="input border-none text-gray-500 dark:text-gray-100"
-                readonly
-              >
-              <input
-                v-model="teacher.lastname"
-                type="text"
-                placeholder="Nom de l'enseignant"
-                class="input border-none text-gray-500 dark:text-gray-100"
-                readonly
-              >
-              <p class="text-right ml-auto">{{ totalHoursByTeacher(teacher.firstname, teacher.lastname) }}h</p>
-            </div>
-          </li>
+        <DisclosurePanel v-else class="dark:text-slate-100" as="ul">
+          <template v-if="teacherId && resourceInfo!.teacherInfo">
+            <li>{{ resourceInfo!.teacherInfo.firstname }} {{ resourceInfo!.teacherInfo.lastname }}</li>
+          </template>
         </DisclosurePanel>
       </Transition>
     </Disclosure>
@@ -106,7 +125,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ITeacher, IResource, ILesson } from '~/types'
+import type { ITeacher, IResource, ILesson, IResourceInfo } from '~/types'
 
 import {
   Disclosure,
@@ -123,17 +142,23 @@ const teacherStore = useTeacherStore()
 const props = defineProps({
 resource: {
   type: Object as () => IResource,
-  required: true
+  required: false,
+  default: () => ({
+    _id: '',
+    name: '',
+    libelle: '',
+    lessons: []
+  })
+},
+resourceInfo: {
+  type: Object as () => IResourceInfo,
+  required: false,
+  default: () => ({})
 },
 teacherId: {
   type: String,
   required: false,
   default: ''
-},
-mode: {
-  type: String,
-  required: false,
-  default: 'normal'
 },
 isAdmin: {
   type: Boolean,
@@ -141,10 +166,11 @@ isAdmin: {
 }
 })
 
-const res = reactive(props.resource)
+const res = props.resource ? reactive(props.resource) : null;
+const resourceInfo = props.resourceInfo ? reactive(props.resourceInfo) : null;
 
 const totalHours = computed(() => {
-  return props.resource.lessons.reduce((total, lesson) => total + lesson.hours, 0);
+  return props.resource?.lessons.reduce((total, lesson) => total + lesson.hours, 0) || 0;
 })
 
 const updateResource = async (resource: IResource) => {
@@ -215,15 +241,11 @@ const deleteLesson = async (lesson: ILesson) => {
   await teacherStore.updateTeacher(props.teacherId, newTeacher)
 }
 
-interface ILessonWithTeacher extends ILesson {
-  teacher: { firstname: string; lastname: string; };
-}
-
-const totalHoursByTeacher = (teacherFirstname: string, teacherLastname: string) => {
-  return (props.resource.lessons as ILessonWithTeacher[])
-    .filter(lesson => lesson.teacher.firstname === teacherFirstname && lesson.teacher.lastname === teacherLastname)
-    .reduce((total, lesson) => total + lesson.hours, 0);
-};
+// const totalHoursByTeacher = (teacherFirstname: string, teacherLastname: string) => {
+//   return (props.resource.lessons as ILessonWithTeacher[])
+//     .filter(lesson => lesson.teacher.firstname === teacherFirstname && lesson.teacher.lastname === teacherLastname)
+//     .reduce((total, lesson) => total + lesson.hours, 0);
+// };
 
 </script>
 

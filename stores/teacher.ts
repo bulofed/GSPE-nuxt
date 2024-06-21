@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ITeacher, IResource, ILesson } from '~/types'
+import type { ITeacher, IResource, ILesson, IResourceInfo } from '~/types'
 
 interface ITeacherResponse {
   teachers: ITeacher[]
@@ -207,14 +207,12 @@ export const useTeacherStore = defineStore({
     async search(query: string) {
       // Returns a list of resources that match the query
       const teachers = await this.fetchTeachers()
-      const resources: { [key: string]: IResource } = {};
+      const resources = {} as Record<string, IResourceInfo>
 
       for (const teacher of teachers) {
         for (const resource of teacher.resources) {
-          if (resource.name.toLowerCase().includes(query.toLowerCase())) {
-            resources[resource.name] = resource;
-          } else if (resource.libelle.toLowerCase().includes(query.toLowerCase())) {
-            resources[resource.libelle] = resource;
+          if (resource.name.toLowerCase().includes(query.toLowerCase()) || resource.libelle.toLowerCase().includes(query.toLowerCase())) {
+            resources[resource.name] = { resource, teacherInfo: teacher.info };
           }
         }
       }

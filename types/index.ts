@@ -27,6 +27,11 @@ export interface ITeacher {
   updatedAt?: Date
 }
 
+export interface IResourceInfo {
+  resource: IResource;
+  teacherInfo: ITeacherInfo;
+}
+
 export interface IUser {
   _id?: Types.ObjectId
   username: string

@@ -6,13 +6,13 @@ import ModuleTitle from '../elements/ModuleTitle.vue';
 import Teacher from './Teacher.vue'
 import Resource from './Resource.vue'
 
-import type { ITeacher, IResource } from '~/types'
+import type { ITeacher, IResourceInfo } from '~/types'
 
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 const teacherStore = useTeacherStore()
 const query = ref('')
-const res = ref<IResource[]>([])
+const res = ref<IResourceInfo[]>([])
 
 onMounted(async() => {
   await teacherStore.fetchTeachers()
@@ -138,9 +138,8 @@ const generatePDF = async() => {
         <div v-if="res.length > 0">
           <Resource
             v-for="resource in res"
-            :key="resource._id!.toString()"
-            :resource="resource"
-            :mode="'search'"
+            :key="resource.resource._id!.toString()"
+            :resourceInfo="resource"
           />
         </div>
         <div v-else>
